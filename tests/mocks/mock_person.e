@@ -8,12 +8,14 @@ note
 		(1) Add features as you like and want (e.g. `first_name', `last_name' in Access feature group).
 		(2) Add features names as strings to `convertible_features' {ARRAY}.
 		
-		You now have everything you need for serialization.
+		DONE: You now have everything you need for serialization.
 		
 		DESERIALIZATION SETUP
 		=====================
 		(1) Ensure `make_from_json' is declared as creation procedure in the "create" class block.
 		(2) Ensure each serialized feature (e.g. `convertible_features') is deserialized from `a_object' in `initialize_from_json_object'.
+		
+		DONE: You now have everything you need for deserialization.
 		
 		NOTES
 		=====
