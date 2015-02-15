@@ -5,15 +5,15 @@ note
 	synopsis: "[
 		SERIALIZATION SETUP
 		===================
-		(1) Add features as you like and want (e.g. `first_name', `last_name' in Access feature group).
-		(2) Add features names as strings to `convertible_features' {ARRAY}.
+		(1) Add features as you like and want (e.g. `first_name', `last_name', and so on in Access feature group).
+		(2) Add features names as strings to `participating_features' {ARRAY}.
 		
 		DONE: You now have everything you need for serialization.
 		
 		DESERIALIZATION SETUP
 		=====================
 		(1) Ensure `make_from_json' is declared as creation procedure in the "create" class block.
-		(2) Ensure each serialized feature (e.g. `convertible_features') is deserialized from `a_object' in `initialize_from_json_object'.
+		(2) Ensure each serialized feature (e.g. `participating_features') is deserialized from `a_object' in `initialize_from_json_object'.
 		
 		DONE: You now have everything you need for deserialization.
 		
@@ -81,11 +81,15 @@ class
 
 inherit
 	JSON_SERIALIZABLE
+		rename
+			convertible_features as participating_features
 		redefine
 			default_create
 		end
 
 	JSON_DESERIALIZABLE
+		rename
+			convertible_features as participating_features
 		undefine
 			default_create
 		end
@@ -170,7 +174,7 @@ feature -- Settings
 
 feature {NONE} -- Implementation
 
-	convertible_features (a_current: ANY): ARRAY [STRING]
+	participating_features (a_current: ANY): ARRAY [STRING]
 			-- <Precursor>
 		do
 			Result := <<"first_name",
