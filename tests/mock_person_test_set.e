@@ -2,6 +2,9 @@ note
 	description: "[
 		Tests of the {MOCK_PERSON} class.
 		]"
+	synopsis: "[
+		Tests for both serialization to JSON and deserialization from JSON to Object.
+		]"
 
 class
 	MOCK_PERSON_TEST_SET

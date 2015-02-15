@@ -2,6 +2,12 @@ note
 	description: "[
 		Documentation for JSON Extension library.
 		]"
+	before_you_begin: "[
+		(1) Place this class into Clickable-view (Control + Shift + C)
+		(2) Pick-and-drop class and feature references to the:
+			(2a) Class tool: Choose Clickable-view to see class notes documentation.
+			(2b) Feature tool: 
+		]"
 	synopsis: "[
 		This library extends the JSON library (see libraries in Groups tool) by
 		providing a simpler API for declaring typical Eiffel classes as being
@@ -25,6 +31,8 @@ note
 		the primary classes mentioned above. One makes this declaration by
 		setting references to the participating features into an array called
 		{JSON_TRANSFORMABLE}.convertible_features
+		
+		Example: {MOCK_PERSON} found in the test-target under "mocks" cluster.
 		]"
 
 deferred class
