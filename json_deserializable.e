@@ -72,7 +72,7 @@ feature {NONE} -- Initialization
 		deferred
 		end
 
-feature {NONE} -- Implementation: Basic Operations
+feature {NONE} -- Conversions: JSON Object
 
 	json_string_to_json_object (a_json: STRING): JSON_OBJECT
 			-- Parse `a_json' to its resulting JSON_OBJECT.
@@ -523,6 +523,12 @@ feature {NONE} -- Implementation
 		ensure
 --			escaped_characters: not (Result.has_substring ("\r") or else Result.has_substring ("\n") or else Result.has_substring ("\f")  or else Result.has_substring ("\b") or else Result.has_substring ("\\") or else Result.has_substring ("\%""))
 			escapted_characters: not Result.has_substring ("\%"")
+		end
+
+	remove_all (a_json_string: STRING): STRING
+			-- Remove brackets, double-quotes, head, and tail from `a_json_string'.
+		do
+			Result := remove_brackets (remove_double_quotes (remove_json_escaped_characters (remove_percents (a_json_string))))
 		end
 
 	remove_brackets (a_json_string: STRING): STRING

@@ -1,6 +1,6 @@
 note
 	description: "[
-		Mock representation of a generic Person class that is serializable and deserializable.
+		Mock representation of a generic "PERSON" class that is serializable and deserializable.
 		]"
 	synopsis: "[
 		SERIALIZATION SETUP
@@ -101,13 +101,23 @@ feature {NONE} -- Initialization
 		do
 			create first_name.make_empty
 			create last_name.make_empty
+			create birthdate.make_now
+			create aliases.make (0)
 		end
 
 	initialize_from_json_object (a_object: JSON_OBJECT)
 			-- <Precursor>
+		local
+			l_aliases: JSON_ARRAY
 		do
 			first_name := json_object_to_attached_string ("first_name", a_object)
 			last_name := json_object_to_attached_string ("last_name", a_object)
+			birthdate := json_object_to_date ("birthdate", a_object)
+			l_aliases := json_object_to_json_array ("aliases", a_object)
+			create aliases.make (l_aliases.count)
+			across l_aliases as ic_aliases loop
+				aliases.force (remove_all (ic_aliases.item.representation))
+			end
 		end
 
 feature -- Access
@@ -118,7 +128,21 @@ feature -- Access
 	last_name: STRING
 			-- Last name of Current.
 
+	birthdate: DATE
+			-- Birth-date of Current.
+
+	aliases: ARRAYED_LIST [STRING]
+			-- Aliases of Current.
+
 feature -- Settings
+
+	add_alias (a_alias: STRING)
+			-- Add `a_alias' to `aliases'.
+		do
+			aliases.force (a_alias)
+		ensure
+			has_alias: aliases.has (a_alias)
+		end
 
 	set_first_name (a_first_name: like first_name)
 			-- Sets `first_name' with `a_first_name'.
@@ -136,12 +160,23 @@ feature -- Settings
 			last_name_set: last_name = a_last_name
 		end
 
+	set_birthdate (a_birthdate: like birthdate)
+			-- Sets `birthdate' with `a_birthdate'.
+		do
+			birthdate := a_birthdate
+		ensure
+			birthdate_set: birthdate = a_birthdate
+		end
+
 feature {NONE} -- Implementation
 
 	convertible_features (a_current: ANY): ARRAY [STRING]
 			-- <Precursor>
 		do
-			Result := <<"first_name", "last_name">>
+			Result := <<"first_name",
+						"last_name",
+						"birthdate",
+						"aliases">>
 		end
 
 end
