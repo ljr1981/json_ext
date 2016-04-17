@@ -53,8 +53,10 @@ feature {NONE} -- Events
 			check attached_object: attached l_object end
 			elmer_net_wowth := json_object_to_decimal_attached ("elmer_net_wowth", l_object)
 			name := json_object_to_json_string_representation_attached ("name", l_object)
---			l_any := json_object_to_json_string_representation ("void_name", l_object)
---			check valid_void_name: not attached l_any end
+
+			l_any := json_object_to_json_string_representation ("void_name", l_object)
+			check valid_void_name: not attached l_any end
+
 			void_name := json_object_to_json_string_representation ("void_name", l_object)
 			immutable_name := json_object_to_json_immutable_string_representation_attached ("immutable_name", l_object)
 			hunts_wabbits := json_object_to_boolean ("hunts_wabbits", l_object)
@@ -63,7 +65,7 @@ feature {NONE} -- Events
 			first_appeawance_date_time := json_object_to_date_time ("first_appearance_date_time", l_object)
 			first_appeawance_runtime := json_object_to_time ("first_appearance_runtime", l_object)
 			number_of_actors_pwaying_elmer := json_object_to_decimal_attached ("number_actors_playing_elmer", l_object)
---			check valid_void_decimal: json_object_to_decimal ("void_decimal", l_object) = Void end
+			check valid_void_decimal: json_object_to_decimal ("void_decimal", l_object) = Void end
 			void_decimal := json_object_to_decimal ("void_decimal", l_object)
 			number_of_years_pwayed_by_bryan := json_object_to_integer ("number_of_years_played_by_bryan", l_object)
 			year_bwyan_started := json_object_to_natural_16 ("year_bryan_started", l_object)
@@ -88,9 +90,6 @@ feature -- Test routines
 			assert_equal ("first_appearance_date_time", "11/29/1937 7:15:15.000 AM", first_appeawance_date_time.out)
 			assert_equal ("first_appearance_runtime", "12:07:00.000 AM", first_appeawance_runtime.out)
 			assert_equal ("seven_actors_as_fudd", "[0,7,0]", number_of_actors_pwaying_elmer.out_tuple)
---			check attached_void_decimal: attached void_decimal as al_decimal then
---				assert_equal ("void_decimal", "[0,sNaN]", al_decimal.out_tuple)
---			end
 			assert_equal ("years_by_bryan", 19, number_of_years_pwayed_by_bryan)
 			assert_equal ("year_bryan_started", (1939).to_natural_16, year_bwyan_started)
 			assert_equal ("years_pwayed_by_mel_blanc", (15).to_natural_32, years_pwayed_by_mel_bwanc)
@@ -118,6 +117,8 @@ feature {NONE} -- Implementation: Access
 			Result := "null"
 		end
 
+	void_decimal: detachable DECIMAL
+
 	immutable_name: IMMUTABLE_STRING_32
 			-- Test of an immutable string Vs. a mutable STRING_Nn.
 
@@ -138,13 +139,6 @@ feature {NONE} -- Implementation: Access
 
 	number_of_actors_pwaying_elmer: DECIMAL
 			-- Test decimal for Current.
-
-	void_decimal: detachable DECIMAL
-			-- Test void decimal for Current.
-			-- The initial value is attached, and creation is responsible for voiding it.
-		attribute
-			create Result.make_from_string ("0.00")
-		end
 
 	number_of_years_pwayed_by_bryan: INTEGER
 			-- Test integer for Current.
@@ -259,7 +253,7 @@ feature {NONE} -- Implementation: Representation Constants
 
 	name_representation: STRING = "%"name%":%"Elmer Fudd%""
 
-	void_name_representation: STRING = "%"void_name%":%"null%""
+	void_name_representation: STRING = "%"void_name%":null"
 
 	immutable_name_representation: STRING = "%"immutable_name%":%"my_immutable_name%""
 
@@ -275,7 +269,7 @@ feature {NONE} -- Implementation: Representation Constants
 
 	number_actors_pwaying_elmer_representation: STRING = "%"number_actors_playing_elmer%":%"[0,7,0]%""
 
-	void_decimal_representation: STRING = "%"void_decimal%":%"null%""
+	void_decimal_representation: STRING = "%"void_decimal%":null"
 
 	number_of_years_pwayed_by_bwyan_representation: STRING = "%"number_of_years_played_by_bryan%":19"
 
