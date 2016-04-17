@@ -1,17 +1,24 @@
 note
-	description: "[
-		Eiffel tests that can be executed by testing tool.
-	]"
-	author: "EiffelStudio test wizard"
-	date: "$Date: 2014-06-03 15:05:12 -0400 (Tue, 03 Jun 2014) $"
-	revision: "$Revision: 9293 $"
 	testing: "type/manual"
 
 class
 	JSON_EXAMPLE_TEST_SET
 
 inherit
-	TEST_SET_HELPER
+	EQA_TEST_SET
+		rename
+			assert as assert_old
+		end
+
+	EQA_COMMONLY_USED_ASSERTIONS
+		undefine
+			default_create
+		end
+
+	TEST_SET_BRIDGE
+		undefine
+			default_create
+		end
 
 feature -- Test routines
 
@@ -33,17 +40,18 @@ feature -- Test routines
 			--| NOTE: The JSON Parser library does not handle malformed JSON. It simply does not parse. For example: In the JSON below, if
 			--|		the "glossry" key tag is missing, then the parser will simply fail to parse and report: {JSON_PARSER}.is_parsed = False.
 		local
-			l_object: JSON_OBJECT
+			l_object: detachable JSON_OBJECT
 			l_parser: JSON_PARSER
 		do
 			create l_parser.make_parser (Json_glossary)
+			l_parser.parse_content
 			assert ("is_parsed", l_parser.is_parsed)
 			l_object := l_parser.parse_object
-			assert ("attached_object", attached l_object)
+			check attached_object: attached l_object end
 				--| Start with the outside JSON_OBJECT "glossary"
 			check attached_glossary: attached {JSON_OBJECT} l_object.item ("glossary") as al_glossary then
 					--| There are two elements contained in "glossary": "title" and "GlossDiv"
-				assert_equals ("glossary_key_count_is_2", 2, al_glossary.current_keys.count)
+				assert_equal ("glossary_key_count_is_2", 2, al_glossary.current_keys.count)
 					--| Get a JSON_STRING for "title"
 				check attached_title: attached {JSON_STRING} al_glossary.item ("title") as al_title then
 					assert_strings_equal ("title_is_example_glossary", "example glossary", al_title.item)
@@ -51,7 +59,7 @@ feature -- Test routines
 					--| Get a JSON_OBJECT for "GlossDiv"
 				check attached_glossary_div: attached {JSON_OBJECT} al_glossary.item ("GlossDiv") as al_glossary_div then
 						--| "GlossDiv" has two elements: "title" and "GlossList"
-					assert_equals ("glossdiv_key_count_is_2", 2, al_glossary_div.current_keys.count)
+					assert_equal ("glossdiv_key_count_is_2", 2, al_glossary_div.current_keys.count)
 						--| Get "title"
 					check attached_glossdiv_title: attached {JSON_STRING} al_glossary_div.item ("title") as al_glossdiv_title then
 						assert_strings_equal ("glossdiv_title_S", "S", al_glossdiv_title.item)
@@ -59,10 +67,10 @@ feature -- Test routines
 						--| Get "GlossList"
 					check attached_glossdiv_list: attached {JSON_OBJECT} al_glossary_div.item ("GlossList") as al_glosslist then
 							--| "GlossList" has one element: "GlossEntry"
-						assert_equals ("glosslist_count_is_1", 1, al_glosslist.current_keys.count)
+						assert_equal ("glosslist_count_is_1", 1, al_glosslist.current_keys.count)
 						check attached_glossentry: attached {JSON_OBJECT} al_glosslist.item ("GlossEntry") as al_glossentry then
 								--| "GlossList" has seven elements: ...
-							assert_equals ("glosslist_count_is_7", 8, al_glossentry.current_keys.count)
+							assert_equal ("glosslist_count_is_7", 8, al_glossentry.current_keys.count)
 							check attached_entry_id: attached {JSON_STRING} al_glossentry.item ("ID") as al_entry then
 								assert_strings_equal ("entry_id_SGML", "SGML", al_entry.item)
 							end
@@ -83,13 +91,13 @@ feature -- Test routines
 							end
 							check attached_entry_glossdef: attached {JSON_OBJECT} al_glossentry.item ("GlossDef") as al_glossdef then
 									--| "GlossList" has seven elements: ...
-								assert_equals ("glossdef_count_is_2", 2, al_glossdef.current_keys.count)
+								assert_equal ("glossdef_count_is_2", 2, al_glossdef.current_keys.count)
 								check attached_para: attached {JSON_STRING} al_glossdef.item ("para") as al_para then
 									assert_strings_equal ("para_def", "A meta-markup language, used to create markup languages such as DocBook.", al_para.item)
 								end
 								check attached_seealso: attached {JSON_ARRAY} al_glossdef.item ("GlossSeeAlso") as al_seealso then
 										--| See Also array has 2 elements
-									assert_equals ("see_also_count_is_2", 2, al_seealso.count)
+									assert_equal ("see_also_count_is_2", 2, al_seealso.count)
 										--| Arrays are checked by way of the `{JSON_ARRAY}.i_th(x).representation' feature call
 									assert_strings_equal ("see_also_GML", "%"GML%"", al_seealso.i_th (1).representation)
 									assert_strings_equal ("see_also_XML", "%"XML%"", al_seealso.i_th (2).representation)
@@ -134,6 +142,6 @@ feature {NONE} -- Implementation: Constants
 }
 	]"
 
-;end
+end
 
 
