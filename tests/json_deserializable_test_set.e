@@ -74,6 +74,7 @@ feature {NONE} -- Events
 			nemesis_count := json_object_to_natural_8 ("nemesis_count", l_object)
 			height_to_headwidth_watio := json_object_to_real_64 ("height_to_headwidth_ratio", l_object)
 			elmers_fwiends := set_elmers_friends (json_object_to_tuple_as_json_array ("elmers_friends", l_object))
+			elmers_things := fill_elmers_things (json_object_to_tuple_as_json_array ("elmers_things", l_object))
 		end
 
 feature -- Test routines
@@ -98,6 +99,7 @@ feature -- Test routines
 			assert_equal ("height_to_headwidth_ratio", 0.36619718309859162, height_to_headwidth_watio)
 			assert_equal ("elmers_friends_bugs", "Bugs Bunny", elmers_fwiends.item (1))
 			assert_equal ("elmers_friends_daffy", "Daffy Duck", elmers_fwiends.item (2))
+			assert_integers_equal ("one_thing", 1, elmers_things.count)
 		end
 
 feature {NONE} -- Implementation: Access
@@ -162,6 +164,9 @@ feature {NONE} -- Implementation: Access
 	elmers_fwiends: ARRAY [STRING_8]
 			-- Test array for Current.
 
+	elmers_things: ARRAY [STRING_8]
+			-- Test array for Current.
+
 	set_elmers_friends (a_json_array: JSON_ARRAY): ARRAY [STRING_8]
 			-- Sets `elmers_fwiends' from  `a_json_array'.
 		local
@@ -170,6 +175,21 @@ feature {NONE} -- Implementation: Access
 			create Result.make_empty
 			from i := 1
 			until i > a_json_array.count
+			loop
+				Result.force (strip_json_quotes (a_json_array.i_th (i).representation.twin), i)
+				i := i + 1
+			end
+		end
+
+	fill_elmers_things (a_json_array: JSON_ARRAY): ARRAY [STRING_8]
+		local
+			i: INTEGER_32
+		do
+			create Result.make_empty
+			from
+				i := 1
+			until
+				i > a_json_array.count
 			loop
 				Result.force (strip_json_quotes (a_json_array.i_th (i).representation.twin), i)
 				i := i + 1
@@ -246,6 +266,8 @@ feature {NONE} -- Implementation: Representation Constants
 			Result.append (years_pwayed_by_mel_bwanc_representation)
 			Result.append (",")
 			Result.append (years_pwayed_by_fwank_welker_representation)
+			Result.append (",")
+			Result.append ("%"elmers_things%":%"thing_1%"")
 			Result.append ("}")
 		end
 

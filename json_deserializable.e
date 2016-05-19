@@ -499,10 +499,14 @@ feature {NONE} -- Conversions: Tuple
 	json_object_to_tuple_as_json_array (a_attribute_name: STRING; a_object: JSON_OBJECT): JSON_ARRAY
 			-- Deserialize actual TUPLE value for `a_attribute_name' from `a_object'.
 		do
-			create Result.make_array
-			check json_tuple_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
-				check tuple_string: attached {JSON_ARRAY} al_object as al_array then
+			create Result.make_empty
+			if attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+				if attached {JSON_ARRAY} al_object as al_array then
 					Result := al_array
+				elseif attached {JSON_STRING} al_object as al_string then
+					Result.put_front (al_string)
+				else
+					check unknown_type: False end
 				end
 			end
 		end
