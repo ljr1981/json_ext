@@ -224,7 +224,7 @@ feature {NONE} -- Implementation: Keyed Conversions
 			fourth_same_number: Result.i_th (4).is_equal (create {JSON_NUMBER}.make_integer (a_mixed_number.denominator))
 		end
 
-	eiffel_tuple_to_json_array (a_key: STRING; a_tuple: TUPLE [detachable ANY]): JSON_ARRAY
+	eiffel_tuple_to_json_array (a_key: STRING; a_tuple: TUPLE [detachable separate ANY]): JSON_ARRAY
 			-- Convert `a_tuple' to JSON_ARRAY with `a_key'
 		local
 			i: INTEGER
@@ -270,7 +270,7 @@ feature {NONE} -- Implementation: Keyed Conversions
 			create Result.make_json_from_string_32 (a_date_time.year.out + "/" + a_date_time.month.out + "/" + a_date_time.day.out + "/" + a_date_time.hour.out + "/" + a_date_time.minute.out + "/" + a_date_time.second.out)
 		end
 
-	eiffel_any_to_json_value (a_key: STRING; a_field: ANY): detachable JSON_VALUE
+	eiffel_any_to_json_value (a_key: STRING; a_field: separate ANY): detachable JSON_VALUE
 			-- If possible, convert various Eiffel types to JSON types given `a_key', `a_field'.
 		local
 			l_json_key: JSON_STRING
@@ -323,7 +323,7 @@ feature {NONE} -- Implementation: Keyed Conversions
 			end
 		end
 
-	eiffel_to_json (a_field: detachable ANY; a_key: STRING): detachable JSON_VALUE
+	eiffel_to_json (a_field: detachable separate ANY; a_key: STRING): detachable JSON_VALUE
 			-- ???
 		do
 			create {JSON_NULL} Result
