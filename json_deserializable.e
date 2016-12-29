@@ -378,7 +378,17 @@ feature {NONE} -- Conversions: Time
 
 feature {NONE} -- Conversions: Date-Time
 
-	json_object_to_date_time (a_attribute_name: STRING; a_object: JSON_OBJECT): DATE_TIME
+	json_object_to_date_time (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable DATE_TIME
+			-- Deserialize DATE_TIME value for `a_attribute_name' from `a_object'.
+		require
+			non_empty_attribute_name: not a_attribute_name.is_empty
+		do
+			if attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_string then
+				Result := json_string_to_date_time (al_string)
+			end
+		end
+
+	json_object_to_date_time_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): DATE_TIME
 			-- Deserialize DATE_TIME value for `a_attribute_name' from `a_object'.
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty

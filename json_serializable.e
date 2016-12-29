@@ -284,6 +284,8 @@ feature {NONE} -- Implementation: Keyed Conversions
 
 			if attached {JSON_SERIALIZABLE} a_field as al_convertible then
 				Result := al_convertible.eiffel_object_to_json_object (al_convertible)
+			elseif attached {CHARACTER_8} a_field as al_field then
+				create {JSON_STRING} Result.make_json_from_string_32 (al_field.out)
 			elseif attached {IMMUTABLE_STRING_8} a_field as al_field then
 				create {JSON_STRING} Result.make_json_from_string_32 (al_field.out)
 			elseif attached {IMMUTABLE_STRING_32} a_field as al_field then
