@@ -96,6 +96,37 @@ feature {NONE} -- Implementation: Basic Operations
 			end
 		end
 
+	json_object_to_json_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_OBJECT]
+		local
+			l_key: JSON_STRING
+		do
+			create Result.make (5)
+			across
+				a_object.current_keys as ic_keys
+			loop
+				l_key := ic_keys.item
+				if attached {JSON_OBJECT} a_object.item (ic_keys.item) as al_object then
+					Result.force (al_object)
+				end
+			end
+		end
+
+	json_object_to_json_object (a_object: JSON_OBJECT; a_index: INTEGER): detachable JSON_OBJECT
+		local
+			l_objects: ARRAYED_LIST [JSON_OBJECT]
+		do
+			l_objects := json_object_to_json_objects (a_object)
+			if a_index = 0 and not l_objects.is_empty then
+				Result := l_objects [1]
+			elseif l_objects.is_empty then
+				Result := Void
+			elseif a_index <= l_objects.count then
+				Result := l_objects [a_index]
+			else
+				Result := Void
+			end
+		end
+
 feature {NONE} -- Conversions: String
 
 	json_object_to_json_string_representation (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable STRING
