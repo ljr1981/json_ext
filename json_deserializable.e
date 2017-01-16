@@ -111,11 +111,42 @@ feature {NONE} -- Implementation: Basic Operations
 			end
 		end
 
+	json_object_to_json_string_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_STRING]
+		local
+			l_key: JSON_STRING
+		do
+			create Result.make (5)
+			across
+				a_object.current_keys as ic_keys
+			loop
+				l_key := ic_keys.item
+				if attached {JSON_STRING} a_object.item (ic_keys.item) as al_object then
+					Result.force (al_object)
+				end
+			end
+		end
+
 	json_object_to_json_object (a_object: JSON_OBJECT; a_index: INTEGER): detachable JSON_OBJECT
 		local
 			l_objects: ARRAYED_LIST [JSON_OBJECT]
 		do
 			l_objects := json_object_to_json_objects (a_object)
+			if a_index = 0 and not l_objects.is_empty then
+				Result := l_objects [1]
+			elseif l_objects.is_empty then
+				Result := Void
+			elseif a_index <= l_objects.count then
+				Result := l_objects [a_index]
+			else
+				Result := Void
+			end
+		end
+
+	json_object_to_json_string_object (a_object: JSON_OBJECT; a_index: INTEGER): detachable JSON_STRING
+		local
+			l_objects: ARRAYED_LIST [JSON_STRING]
+		do
+			l_objects := json_object_to_json_string_objects (a_object)
 			if a_index = 0 and not l_objects.is_empty then
 				Result := l_objects [1]
 			elseif l_objects.is_empty then
@@ -198,7 +229,7 @@ feature {NONE} -- Conversions: Boolean
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_boolean_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			if attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
 				Result := al_object.representation.same_string (json_true)
 			end
 		end
