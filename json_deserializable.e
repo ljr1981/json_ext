@@ -158,6 +158,17 @@ feature {NONE} -- Implementation: Basic Operations
 			end
 		end
 
+	json_object_to_json_reference_subobject (a_object: JSON_OBJECT; a_attribute_name: STRING): detachable JSON_OBJECT
+			-- Locate a reference for attribute `a_attribute_name' in `a_object' and create the referenced object.
+		local
+			l_key: JSON_STRING
+		do
+			create l_key.make_from_string (a_attribute_name)
+			if attached {JSON_OBJECT} a_object.item (l_key) as al_json_object then
+				Result := al_json_object
+			end
+		end
+
 feature {NONE} -- Conversions: String
 
 	json_object_to_json_string_representation (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable STRING
