@@ -588,6 +588,8 @@ feature {NONE} -- Conversions: Tuple
 					Result := al_array
 				elseif attached {JSON_STRING} al_object as al_string then
 					Result.put_front (al_string)
+				elseif attached {JSON_NULL} al_object as al_null then
+					do_nothing -- NULL values count for nothing in building of the array
 				else
 					check unknown_type: False end
 				end

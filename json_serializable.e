@@ -178,6 +178,8 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 							Result.add (eiffel_array_to_json_array (al_array_item))
 						elseif attached {ARRAYED_LIST [detachable ANY]} al_item as al_arrayed_list_item then
 							Result.add (eiffel_arrayed_list_to_json_array (al_arrayed_list_item))
+						elseif attached {DECIMAL} al_item as al_decimal then
+							Result.add (create {JSON_STRING}.make_from_string (al_decimal.to_engineering_string))
 						else
 							if attached eiffel_any_to_json_value ("element_" + k.out, al_item) as al_value then
 								Result.add (al_value)
