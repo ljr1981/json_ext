@@ -601,8 +601,10 @@ feature {NONE} -- Conversions: Tuple
 		do
 			create Result.make_array
 			check json_array_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
-				check array_string: attached {JSON_ARRAY} al_object as al_array then
+				if attached {JSON_ARRAY} al_object as al_array then
 					Result := al_array
+				else
+					create Result.make_empty
 				end
 			end
 		end
