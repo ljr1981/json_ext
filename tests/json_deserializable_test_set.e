@@ -61,7 +61,7 @@ feature {NONE} -- Events
 			immutable_name := json_object_to_json_immutable_string_representation_attached ("immutable_name", l_object)
 			hunts_wabbits := json_object_to_boolean ("hunts_wabbits", l_object)
 			has_beard := json_object_to_boolean ("has_beard", l_object)
-			first_appeawance_date := json_object_to_date ("first_appearance_date", l_object)
+			first_appeawance_date := json_object_to_date_attached ("first_appearance_date", l_object)
 			first_appeawance_date_time := json_object_to_date_time_attached ("first_appearance_date_time", l_object)
 			first_appeawance_runtime := json_object_to_time ("first_appearance_runtime", l_object)
 			number_of_actors_pwaying_elmer := json_object_to_decimal_attached ("number_actors_playing_elmer", l_object)

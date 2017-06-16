@@ -71,6 +71,122 @@ feature {NONE} -- Initialization
 		deferred
 		end
 
+feature {NONE} -- Implementation: Array Fillers
+
+	fill_arrayed_list_of_strings (a_json_array: JSON_ARRAY): ARRAYED_LIST [STRING]
+		local
+			l_filler: JSON_FILLABLES [STRING]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_type (a_json_array, agent string_creation_agent)
+		end
+
+	fill_arrayed_list_of_detachable_strings (a_json_array: JSON_ARRAY): ARRAYED_LIST [detachable STRING]
+		local
+			l_filler: JSON_FILLABLES [detachable STRING]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_detachable_type (a_json_array, agent detachable_string_creation_agent)
+		end
+
+	string_creation_agent (a_json_string: STRING): STRING
+		do
+			Result := a_json_string
+		end
+
+	detachable_string_creation_agent (a_json_string: STRING): detachable STRING
+		do
+			if not a_json_string.same_string ("null") then
+				Result := a_json_string
+			end
+		end
+
+	fill_arrayed_list_of_decimals (a_json_array: JSON_ARRAY): ARRAYED_LIST [DECIMAL]
+		local
+			l_filler: JSON_FILLABLES [DECIMAL]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_type (a_json_array, agent decimal_creation_agent)
+		end
+
+	decimal_creation_agent (a_json_string: STRING): DECIMAL
+		do
+			create Result.make_from_string (a_json_string)
+		end
+
+	fill_arrayed_list_of_integers (a_json_array: JSON_ARRAY): ARRAYED_LIST [INTEGER]
+		local
+			l_filler: JSON_FILLABLES [INTEGER]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_type (a_json_array, agent integer_creation_agent)
+		end
+
+	integer_creation_agent (a_json_string: STRING): INTEGER
+		require
+			is_integer: a_json_string.is_integer
+		do
+			Result := a_json_string.to_integer
+		end
+
+	fill_arrayed_list_of_booleans (a_json_array: JSON_ARRAY): ARRAYED_LIST [BOOLEAN]
+		local
+			l_filler: JSON_FILLABLES [BOOLEAN]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_type (a_json_array, agent boolean_creation_agent)
+		end
+
+	boolean_creation_agent (a_json_string: STRING): BOOLEAN
+		require
+			is_boolean: a_json_string.is_boolean
+		do
+			Result := a_json_string.to_boolean
+		end
+
+	fill_arrayed_list_of_naturals (a_json_array: JSON_ARRAY): ARRAYED_LIST [NATURAL]
+		local
+			l_filler: JSON_FILLABLES [NATURAL]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_type (a_json_array, agent natural_creation_agent)
+		end
+
+	natural_creation_agent (a_json_string: STRING): NATURAL
+		require
+			is_boolean: a_json_string.is_natural
+		do
+			Result := a_json_string.to_natural
+		end
+
+	fill_arrayed_list_of_reals (a_json_array: JSON_ARRAY): ARRAYED_LIST [REAL]
+		local
+			l_filler: JSON_FILLABLES [REAL]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_type (a_json_array, agent real_creation_agent)
+		end
+
+	real_creation_agent (a_json_string: STRING): REAL
+		require
+			is_boolean: a_json_string.is_real
+		do
+			Result := a_json_string.to_real
+		end
+
+	fill_arrayed_list_of_dates (a_json_array: JSON_ARRAY): ARRAYED_LIST [DATE]
+		local
+			l_filler: JSON_FILLABLES [DATE]
+		do
+			create l_filler
+			Result := l_filler.fill_arrayed_list_of_any_type (a_json_array, agent date_creation_agent)
+		end
+
+	date_creation_agent (a_json_string: STRING): DATE
+		do
+			Result := string_to_date (a_json_string, '/')
+		end
+
 feature {NONE} -- Implementation: Basic Operations
 
 	json_string_to_json_object (a_json: STRING): detachable JSON_OBJECT
@@ -395,7 +511,7 @@ feature {NONE} -- Conversions: Real
 
 feature {NONE} -- Conversions: Date
 
-	json_object_to_date (a_attribute_name: STRING; a_object: JSON_OBJECT): DATE
+	json_object_to_date_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): DATE
 			-- Deserialize DATE value for `a_attribute_name' from `a_object'.
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
@@ -406,15 +522,29 @@ feature {NONE} -- Conversions: Date
 			end
 		end
 
+	json_object_to_date (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable DATE
+			-- Deserialize DATE value for `a_attribute_name' from `a_object'.
+		require
+			non_empty_attribute_name: not a_attribute_name.is_empty
+		do
+			create Result.make_now
+			if attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_string then
+				Result := json_string_to_date (al_string)
+			end
+		end
+
 	json_string_to_date (a_json_string: JSON_STRING): DATE
 			-- Deserialize actual DATE value from `a_json_string'.
+		do
+			Result := string_to_date (strip_json_quotes (a_json_string.representation), '/')
+		end
+
+	string_to_date (a_string: STRING; a_splitter: CHARACTER): DATE
 		local
-			l_string: STRING
 			l_specification: LIST [STRING_8]
 			l_dd, l_mm, l_yyyy: INTEGER
 		do
-			l_string := strip_json_quotes (a_json_string.representation)
-			l_specification := l_string.split ('/')
+			l_specification := a_string.split (a_splitter)
 			l_yyyy := l_specification.i_th (1).to_integer
 			l_mm := l_specification.i_th (2).to_integer
 			l_dd := l_specification.i_th (3).to_integer
@@ -436,13 +566,17 @@ feature {NONE} -- Conversions: Time
 
 	json_string_to_time (a_json_string: JSON_STRING): TIME
 			-- Deserialize actual TIME value from `a_json_string'.
+		do
+			Result := string_to_time (strip_json_quotes (strip_json_brackets (strip_json_percents (a_json_string.representation))), '/')
+		end
+
+	string_to_time (a_string: STRING; a_splitter: CHARACTER): TIME
 		local
 			l_list: LIST [STRING]
 			l_hours, l_minutes, l_seconds: INTEGER
 			l_json_string: STRING
 		do
-			l_json_string := strip_json_quotes (strip_json_brackets (strip_json_percents (a_json_string.representation)))
-			l_list := l_json_string.split ('/')
+			l_list := a_string.split (a_splitter)
 			l_hours := l_list.i_th (1).to_integer
 			l_minutes := l_list.i_th (2).to_integer
 			l_seconds := l_list.i_th (3).to_integer
@@ -578,6 +712,38 @@ feature {TEST_SET_BRIDGE} -- Conversions: Mixed Number
 		end
 
 feature {NONE} -- Conversions: Tuple
+
+	json_array_to_eiffel_tuple (a_array: JSON_ARRAY): TUPLE
+		local
+			i: INTEGER
+		do
+			create Result
+			across
+				a_array.array_representation as ic
+			loop
+				i := ic.cursor_index
+				if attached {JSON_BOOLEAN} ic.item as al_item then
+					Result.put_boolean (al_item.item, i)
+				elseif attached {JSON_NULL} ic.item as al_item then
+					Result.put (al_item, i)
+				elseif attached {JSON_NUMBER} ic.item as al_item then
+					if al_item.is_double then
+						Result.put_double (al_item.double_item, i)
+					elseif al_item.is_integer then
+						Result.put_integer (al_item.integer_type, i)
+					elseif al_item.is_natural then
+						Result.put_natural_64 (al_item.natural_64_item, i)
+					elseif al_item.is_real then
+						Result.put_real (al_item.real_type, i)
+					end
+				elseif attached {JSON_OBJECT} ic.item as al_item then
+					Result.put (json_string_to_json_object (al_item.representation), i)
+				elseif attached {JSON_STRING} ic.item as al_item then
+					Result.put (al_item.item, i)
+				end
+				i := i + 1
+			end
+		end
 
 	json_object_to_tuple_as_json_array (a_attribute_name: STRING; a_object: JSON_OBJECT): JSON_ARRAY
 			-- Deserialize actual TUPLE value for `a_attribute_name' from `a_object'.

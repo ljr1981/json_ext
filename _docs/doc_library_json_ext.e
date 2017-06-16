@@ -65,14 +65,14 @@ note
 		
 		make_from_json (a_json: STRING)
 				-- <Precursor>
-			require else											<-- This must be here because the ancestor is False.
-				True													Leaving it False, will cause this to fail.
+			require else											-- This must be here because the ancestor is False.
+				True												--	Leaving it False, will cause this to fail.
 			local
-				l_object: detachable JSON_OBJECT					<-- You must have one of these because ...
+				l_object: detachable JSON_OBJECT					-- You must have one of these because ...
 				l_any: detachable ANY
 			do
-				l_object := json_string_to_json_object (a_json)		<-- ... the JSON string is parsed to a JSON_OBJECT.
-				check attached_object: attached l_object end		<-- This proves that our JSON parsing was okay.
+				l_object := json_string_to_json_object (a_json)		-- ... the JSON string is parsed to a JSON_OBJECT.
+				check attached_object: attached l_object end		-- This proves that our JSON parsing was okay.
 				
 					-- {STRING}s
 				name := json_object_to_json_string_representation_attached ("name", l_object)
@@ -109,8 +109,8 @@ note
 
 				my_mixed := json_string_to_mixed_number ("myMixed", l_object) <-- {FW_MIXED_NUMBER}
 
-					-- {ARRAY}
-				my_list := fill_my_list (json_object_to_tuple_as_json_array ("myList", l_object))
+					-- {ARRAY}|{ARRAYED_LIST}
+				my_list := fill_materials (json_object_to_json_array ("my_list", l_object))
 			end
 
 		Other features in the same class for array processing will be (based on the above):
