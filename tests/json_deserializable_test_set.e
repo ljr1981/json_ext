@@ -196,26 +196,26 @@ feature {NONE} -- Implementation: Access
 			end
 		end
 
-	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+	metadata (a_current: ANY): ARRAY [JSON_METADATA]
 		do
 			Result := <<
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"],
-						["text"]
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default
 						>>
 		end
 

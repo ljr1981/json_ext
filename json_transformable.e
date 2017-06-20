@@ -104,7 +104,7 @@ feature -- Access
 
 feature -- Access
 
-	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+	metadata (a_current: ANY): ARRAY [JSON_METADATA]
 		deferred
 		ensure
 			applied_to_all_convertibles: convertible_features (a_current).count = Result.count

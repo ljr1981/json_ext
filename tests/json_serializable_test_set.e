@@ -243,10 +243,10 @@ feature {NONE} -- Implementation: Mock Features
 
 feature {NONE} -- Implementation
 
-	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+	metadata (a_current: ANY): ARRAY [JSON_METADATA]
 		do
 			Result := <<
-						["text"]
+						create {JSON_METADATA}.make_text_default
 						>>
 		end
 
