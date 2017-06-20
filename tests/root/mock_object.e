@@ -32,6 +32,16 @@ feature -- Access
 
 feature -- Access: Convertibles
 
+	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+		do
+			Result := <<
+						["text"],
+						["text"],
+						["text"],
+						["text"]
+						>>
+		end
+
 	convertible_features (a_current: ANY): ARRAY [STRING]
 		do
 			Result := <<

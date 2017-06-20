@@ -243,6 +243,13 @@ feature {NONE} -- Implementation: Mock Features
 
 feature {NONE} -- Implementation
 
+	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+		do
+			Result := <<
+						["text"]
+						>>
+		end
+
 	convertible_features (a_object: ANY): ARRAY [STRING]
 			-- <Precursor>
 		once

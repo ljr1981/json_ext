@@ -102,7 +102,23 @@ feature -- Access
 			end
 		end
 
-feature {NONE} -- Implementation: Access
+feature -- Access
+
+	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+		deferred
+		ensure
+			applied_to_all_convertibles: convertible_features (a_current).count = Result.count
+			valid_types: across Result as ic_result some
+								across valid_types as ic_types some
+									ic_types.item.same_string (ic_result.item.type)
+								end
+							end
+		end
+
+	valid_types: ARRAY [STRING]
+		once
+			Result := <<"button","checkbox","color","date","datetime-local","email","file","hidden","image","month","number","password","radio","range","reset","search","submit","tel","text","time","url","week">>
+		end
 
 	convertible_features (a_current: ANY): ARRAY [STRING]
 			-- Features of Current (`a_current') identified to participate in JSON conversion.

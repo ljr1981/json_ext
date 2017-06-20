@@ -50,6 +50,14 @@ feature -- Access
 
 feature {NONE} -- Implementation: Access
 
+	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+		do
+			Result := <<
+						["text"],
+						["text"]
+						>>
+		end
+
 	convertible_features (a_current: ANY): ARRAY [STRING]
 			-- Features of Current (`a_current') identified to participate in JSON conversion.
 		do

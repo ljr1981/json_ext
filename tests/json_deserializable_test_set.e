@@ -196,6 +196,29 @@ feature {NONE} -- Implementation: Access
 			end
 		end
 
+	metadata (a_current: ANY): ARRAY [TUPLE [type: STRING]]
+		do
+			Result := <<
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"],
+						["text"]
+						>>
+		end
+
 	convertible_features (a_object: ANY): ARRAY [STRING]
 			-- <Precursor>
 		once ("object")
