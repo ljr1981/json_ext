@@ -136,10 +136,11 @@ feature {NONE} -- Initialization
 			make ("button", a_name, Void)
 		end
 
-	make_checkbox (a_name: STRING; a_default_value: like default_value)
+	make_checkbox (a_name: STRING; a_default_value: like default_value; a_is_checked: BOOLEAN)
 			-- <input type="checkbox" name="vehicle3" value="Boat" checked> 					--> vehicle3=Boat, due to "checked"
 		do
 			make ("checkbox", a_name, a_default_value)
+			is_checked := a_is_checked
 		end
 
 	make_radio (a_name: STRING; a_default_value: like default_value)
@@ -193,7 +194,7 @@ feature {NONE} -- Initialization
 			--  <input type="submit" name="x">*****												--> Sends <form> <input> values to server as v1&v2&...vn
 			-- ***** The "name" attribute on type="submit" is superfluous.
 		do
-			make ("submit", "Subit", Void)
+			make ("submit", "Submit", Void)
 		end
 
 	make_reset
@@ -203,10 +204,10 @@ feature {NONE} -- Initialization
 			make ("reset", "Reset", Void)
 		end
 
-	make_hidden (a_name: STRING)
+	make_hidden (a_name: STRING; a_default_value: like default_value)
 	-- <input type="hidden" name="country" value="Norway">								--> country=Norway
 		do
-			make ("hidden", a_name, Void)
+			make ("hidden", a_name, a_default_value)
 		end
 
 	make (a_type: like type; a_name: like name; a_default_value: like default_value)
@@ -316,6 +317,10 @@ feature -- Access: Optional maxlength
 
 	maxlength: detachable INTEGER
 	maxlength_attached: attached like maxlength do check attached maxlength as al_result then Result := al_result end end
+
+feature -- Access: Checkbox
+
+	is_checked: BOOLEAN
 
 feature -- Queries
 
