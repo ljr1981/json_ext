@@ -105,14 +105,8 @@ feature -- Access
 feature -- Access
 
 	metadata (a_current: ANY): ARRAY [JSON_METADATA]
-		deferred
-		ensure
-			applied_to_all_convertibles: convertible_features (a_current).count = Result.count
-			valid_types: across Result as ic_result some
-								across valid_types as ic_types some
-									ic_types.item.same_string (ic_result.item.type)
-								end
-							end
+		do
+			Result := metadata_attached (a_current, False)
 		end
 
 	valid_types: ARRAY [STRING]
@@ -129,6 +123,29 @@ feature -- Access
 		end
 
 feature {NONE} -- Implementation
+
+	metadata_attached (a_current: ANY; a_refresh: BOOLEAN): ARRAY [JSON_METADATA]
+		do
+			if not a_refresh and then attached metadata_internal as al_result then
+				Result := al_result
+			else
+				Result := metadata_refreshed (a_current)
+				metadata_internal := Result
+			end
+		end
+
+	metadata_refreshed (a_current: ANY): ARRAY [JSON_METADATA]
+		deferred
+		ensure
+			applied_to_all_convertibles: convertible_features (a_current).count = Result.count
+			valid_types: across Result as ic_result some
+								across valid_types as ic_types some
+									ic_types.item.same_string (ic_result.item.type)
+								end
+							end
+		end
+
+	metadata_internal: detachable ARRAY [JSON_METADATA]
 
 	reflector: INTERNAL
 			-- `reflector' once'd for Current

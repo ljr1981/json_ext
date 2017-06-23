@@ -49,6 +49,8 @@ feature {NONE} -- Initialization
 		do
 			type := "text"
 			create name.make_empty
+			set_is_required
+			set_is_for_output
 		end
 
 	make_text_default
@@ -220,6 +222,7 @@ feature {NONE} -- Initialization
 		require
 			has_type: is_valid_type_identifier (a_type)
 		do
+			default_create
 			type := a_type
 			name := a_name
 			default_value := a_default_value
@@ -324,6 +327,14 @@ feature -- Access: Checkbox
 
 feature -- Queries
 
+	is_required: BOOLEAN
+			-- `is_required' within the Client context.
+			--	(i.e. what does `is_required' mean to the Client--it could be anything)
+
+	is_for_output: BOOLEAN
+			-- `is_for_output' (like `is_required') depends on Client context.
+			-- 	(i.e. the semantic purpose of `is_for_output' is held in the Client and not here)
+
 	is_valid_type_identifier (a_identifier: like type): BOOLEAN
 		do
 			Result := across valid_type_identifiers as ic some a_identifier.same_string (ic.item) end
@@ -333,6 +344,14 @@ feature -- Queries
 		do
 			Result := is_valid_type_identifier (type)
 		end
+
+feature -- Setters
+
+	set_is_required do is_required := True end
+	reset_is_required do is_required := False end
+
+	set_is_for_output do is_for_output := True end
+	reset_is_for_output do is_for_output := False end
 
 feature -- Constants
 
