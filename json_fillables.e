@@ -1,9 +1,25 @@
+note
+	description: "Representation of {JSON_FILLABLES} or arrays with JSON things."
+
+	purpose: "[
+		Collection of features to transform JSON_ARRAY items into ARRAYED_LIST items.
+		
+		Specifically, we've a list of [G]'s in the JSON_ARRAY and want to place them 
+		into an ARRAYED_LIST [G].
+		]"
+
+	details: "[
+		Sometimes we get JSON_ARRAY lists filled with "x" things and we need typical ARRAYED_LIST [G].
+		]"
+
 class
 	JSON_FILLABLES [G -> detachable ANY]
 
 feature -- JSON Type Fillers
 
 	filled_arrayed_list_of_json_objects (a_json_array: JSON_ARRAY): ARRAYED_LIST [JSON_OBJECT]
+			-- Create an ARRAYED_LIST [JSON_OBJECT] from `a_json_array' as JSON_ARRAY list.
+			-- Only attached items in the list are moved from the JSON_ARRAY to the ARRAYED_LIST.
 		local
 			l_item: ANY
 		do
