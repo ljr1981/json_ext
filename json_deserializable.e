@@ -214,14 +214,11 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_OBJECT]
-		local
-			l_key: JSON_STRING
 		do
 			create Result.make (5)
 			across
 				a_object.current_keys as ic_keys
 			loop
-				l_key := ic_keys.item
 				if attached {JSON_OBJECT} a_object.item (ic_keys.item) as al_object then
 					Result.force (al_object)
 				end
@@ -229,14 +226,11 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_string_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_STRING]
-		local
-			l_key: JSON_STRING
 		do
 			create Result.make (5)
 			across
 				a_object.current_keys as ic_keys
 			loop
-				l_key := ic_keys.item
 				if attached {JSON_STRING} a_object.item (ic_keys.item) as al_object then
 					Result.force (al_object)
 				end
@@ -632,18 +626,15 @@ feature {TEST_SET_HELPER} -- Conversions: Decimal
 			-- Deserialize actual DECIMAL value for `a_attribute_name' from `a_object'.
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
-		local
-			l_string: STRING
 		do
 			create Result
-			create l_string.make_empty
-			check attached {JSON_OBJECT} a_object as al_object then
-				if attached {JSON_NULL} al_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) then
+--			check attached {JSON_OBJECT} a_object as al_object then
+				if attached {JSON_NULL} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) then
 					Result := Void
-				elseif attached {JSON_STRING} al_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_value then
+				elseif attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_value then
 					Result := json_string_to_decimal (al_value)
 				end
-			end
+--			end
 		end
 
 	json_object_to_decimal_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): DECIMAL

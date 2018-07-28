@@ -102,8 +102,6 @@ feature -- Access
 			end
 		end
 
-feature -- Access
-
 	metadata (a_current: ANY): ARRAY [JSON_METADATA]
 		do
 			Result := metadata_attached (a_current, False)
