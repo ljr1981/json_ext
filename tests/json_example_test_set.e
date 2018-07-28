@@ -43,10 +43,11 @@ feature -- Test routines
 			l_object: detachable JSON_OBJECT
 			l_parser: JSON_PARSER
 		do
-			create l_parser.make_parser (Json_glossary)
+			create l_parser.make_with_string (Json_glossary)
 			l_parser.parse_content
 			assert ("is_parsed", l_parser.is_parsed)
-			l_object := l_parser.parse_object
+			l_parser.parse_content
+			l_object := l_parser.parsed_json_object
 			check attached_object: attached l_object end
 				--| Start with the outside JSON_OBJECT "glossary"
 			check attached_glossary: attached {JSON_OBJECT} l_object.item ("glossary") as al_glossary then
