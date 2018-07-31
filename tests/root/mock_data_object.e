@@ -25,8 +25,6 @@ feature {NONE} -- Initialization
 			make_from_json (a_json)
 		end
 
-	table_index: INTEGER
-
 	make_from_json (a_json: STRING)
 			-- <Precursor>
 		note
@@ -135,7 +133,22 @@ feature -- Access
 			create Result.make (100)
 		end
 
+feature -- Settings
+
+	set_table_index (a_index: like table_index)
+			-- Assign `a_index' to `table_index'.
+		require
+			positive_and_non_zero_value: a_index > 0
+		do
+			table_index := a_index
+		ensure
+			set: table_index = a_index
+		end
+
 feature {NONE} -- Implementation
+
+	table_index: INTEGER assign set_table_index
+			-- Index of what table data item to access when creating Current.
 
 	metadata_refreshed (a_current: ANY): ARRAY [JSON_METADATA]
 			-- <Precursor>
