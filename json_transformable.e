@@ -114,6 +114,35 @@ feature -- Access
 
 	convertible_features (a_current: ANY): ARRAY [STRING]
 			-- Features of Current (`a_current') identified to participate in JSON conversion.
+		note
+			description: "A list of class features that will convert to and from JSON"
+			details: "[
+				The JSON Extension library uses introspection (i.e. {INTERNAL}) to locate and
+				access Eiffel class features. It accesses these features for the purpose of
+				either serialization or deserialization.
+				
+				For example: Class {ACCOUNT} has features:
+				
+				owner_name: STRING
+				number: STRING
+				balance: DECIMAL
+				opened: DATE
+				
+				convertible_features (a_current: ANY): ARRAY [STRING]
+					do
+						Result := <<
+								"owner_name",
+								"number",
+								"balance",
+								"opened"
+								>>
+				
+				In the example above, we have a class named {ACCOUNT} with a feature named `number'
+				of type {STRING}. We want to tell the serialization and deserialization processes to
+				include (convert) the feature `number' to and from JSON. So, we include the feature
+				name as a string in the manifest array, which is then assigned to the Result of
+				`convertible_features'.
+				]"
 		deferred
 		ensure
 			result_not_empty: not Result.is_empty
