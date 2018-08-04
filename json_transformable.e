@@ -143,6 +143,12 @@ feature -- Access
 				name as a string in the manifest array, which is then assigned to the Result of
 				`convertible_features'.
 				]"
+			see_also: "[
+				{JSON_SERIALIZABLE}.eiffel_object_to_json_object - Converts the features of an Eiffel
+					object feature-by-feature (field-by-field) into JSON_VALUE objects. Uses the
+					convertible_features array to know which field of the passed object require
+					serialization from Eiffel objects to JSON_VALUE objects.
+				]"
 		deferred
 		ensure
 			result_not_empty: not Result.is_empty
