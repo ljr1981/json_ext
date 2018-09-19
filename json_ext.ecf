@@ -33,7 +33,7 @@
 		<cluster name="json_ext" location=".\" recursive="true"/>
 	</target>
 	<target name="test" extends="json_ext">
-		<root class="ROOT_FOR_JSON_EXT" feature="default_create"/>
+		<root class="ANY" feature="default_create"/>
 		<file_rule>
 			<exclude>/.git$</exclude>
 			<exclude>/.svn$</exclude>
