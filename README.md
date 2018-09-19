@@ -47,6 +47,7 @@ For `convertible_features`see **JSON_SERIALIZABLE** (above). If your class is bo
 
 Second--you must implement the `make_from_json` creation procedure. This procedure must perform some basic steps. For example: Let's look at the `make_from_json` for the class having the `name`, `truck_id`, and `sms_device` features (above).
 
+```
 	make_from_json (a_json: STRING)
 			-- <Precursor>
 		require else											-- This must be here because the ancestor is False.
@@ -62,6 +63,7 @@ Second--you must implement the `make_from_json` creation procedure. This procedu
 			truck_id := json_object_to_json_string_representation ("truck_id", l_object)
 			sms_device := json_object_to_json_string_representation ("sms_device", l_object)
 		end
+```
 
 Pay special attention to the `*_attached` feature used for the `name` feature. All of the data-type parsing features generally have an attached and detached version. The detached feature version simply excludes the `_attached` suffix. Therefore, in the example, the `truck_id` and `sms_device` are detached and can be Void. The feature called is coded such that the Result of the feature might be Void. This could mean that the feature is represented in the JSON string, but is set to "null", or it could mean that the feature is not in the JSON string and is (as a consequence) Void. Either way—the Result will be Void. If you expect your JSON to have an attached value (e.g. it is both in the JSON string and is not "null"), then use the `*_attached` version of the call. Otherwise, use the detached version.
 
@@ -69,31 +71,35 @@ NOTE: The line with check attached_object: attached l_object end is there becaus
 
 You will find features for many possible standard deserialization of JSON→Eiffel data types. In each case, you need to pass the name of the feature from your `convertible_features` ARRAY (list) along with the `l_object` (e.g. **JSON_OBJECT**, which represents your a_json string as a parsed Eiffel object). For example:
 
-JSON -> STRING
+```
+JSON → STRING
 ==============
 json_object_to_json_string_representation → detachable STRING
 json_object_to_json_string_representation_attached → attached STRING
 json_object_to_json_immutable_string_representation → detachable IMMUTABLE_STRING
 json_object_to_json_immutable_string_representation_attached → attached IMMUTABLE_STRING
+```
 
 The interesting variant on the features above is one that searches through the JSON_OBJECT looking for an attribute at any level in the JSON-object-graph for by name. This is intended to be a "quick-and-dirty" solution and only used on the rarest of occasions. What you will quickly note is that if you have several objects in the JSON with the same attribute name, this will return the first one that it finds. Also, because the Result is attached, your JSON must have the attribute or the code will fail. The variant feature is:
 
-recursive_json_object_to_json_string_representation --> attached STRING
+recursive_json_object_to_json_string_representation → attached STRING
 
-JSON -> BOOLEAN
+```
+JSON → BOOLEAN
 ===============
-json_object_to_boolean --> BOOLEAN
-json_object_to_boolean_attached --> attached BOOLEAN
-
-JSON --> INTEGER
+json_object_to_boolean → BOOLEAN
+json_object_to_boolean_attached → attached BOOLEAN
+```
+```
+JSON → INTEGER
 ================
 json_object_to_integer → INTEGER
 json_object_to_integer_8 → INTEGER_8
 json_object_to_integer_16 → INTEGER_16
 json_object_to_integer_32 → INTEGER_32
 json_object_to_integer_64 → INTEGER_64
-
-NOTE: The same type of features exist for NATURAL and REAL numbers as well.
+```
+*NOTE: The same type of features exist for NATURAL and REAL numbers as well."
 
 There are also features for finding and return **DATE**, **TIME**, and **DATE_TIME** data types, as well as **DECIMAL** and **MIXED_NUMBER** types too.
 
