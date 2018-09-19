@@ -87,4 +87,10 @@ feature {NONE} -- Implementation
 					>>
 		end
 
+	convertible_features_tuple: TUPLE [name_item, age_item, dob_item: STRING]
+			--
+		do
+			Result := [convertible_features (Current) [1], convertible_features (Current) [2], convertible_features (Current) [3]]
+		end
+
 end
