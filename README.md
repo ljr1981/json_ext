@@ -1,5 +1,5 @@
-# json_ext
-JSON Extension
+# JSON Extension Library
+The json_ext library written in Eiffel for Eiffel object serialization and deserialization.
 
 Purpose
 =======
