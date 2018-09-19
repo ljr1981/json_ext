@@ -5,6 +5,13 @@ Purpose
 =======
 Use this library for two purposes: Serialization of Eiffel objects (and object graphs) into well-formed JSON -AND- Deserialization of JSON to Eiffel objects and object graphs.
 
+Examples
+========
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=kyw7eFFvIM0
+" target="_blank"><img src="http://img.youtube.com/vi/kyw7eFFvIM0/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
 Serialization
 =============
 Objects that you want to serialize to JSON inherit from **JSON_SERIALIZABLE**. The class has one deferred feature, which you must implement:
