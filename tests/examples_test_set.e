@@ -4,6 +4,7 @@ note
 	]"
 	testing: "type/manual"
 	EIS: "name=example_video", "src=https://youtu.be/G9AiHaYdqzU"
+	EIS: "name=example_video_recursive", "src=https://www.youtube.com/watch?v=_SloGPXGOow"
 
 class
 	EXAMPLES_TEST_SET
@@ -30,12 +31,16 @@ feature -- Example routines
 	simple_serialization_only_example
 			-- Example show a simple object being serialzed to
 			-- JSON and then deserialized back to object.
+		note
+			EIS: "name=example_video", "src=https://youtu.be/G9AiHaYdqzU"
 		do
 			assert_strings_equal ("bugs_bunny_serialized_to_JSON", bugs_bunny_json, bugs_bunny.json_out)
 		end
 
 	simple_deserialization_example
 			-- Example showing a simple object being serialized and then deserialized.
+		note
+			EIS: "name=example_video", "src=https://youtu.be/G9AiHaYdqzU"
 		local
 			l_elmer: MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
 		do
@@ -55,6 +60,7 @@ feature -- Example routines
 				Create a parent class which has a list of people, where each person
 				object is JSON serializable and deserializable.
 				]"
+			EIS: "name=example_video_recursive", "src=https://www.youtube.com/watch?v=_SloGPXGOow"
 		local
 			l_people: MOCK_PEOPLE_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
 		do
