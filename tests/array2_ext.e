@@ -1,3 +1,30 @@
+note
+	warning: "[
+		NOT A PART OF LIBRARY!
+		======================
+		
+		This class is not a part of this library! I had this library open and was
+		coding out a response to a question about creating a simple extension of
+		the {ARRAY2} class to have easy-to-understand features. I coded that example
+		and its test here. This needs to be moved to the Catch-all library I call
+		"Framework" (see EIS link below).
+		]"
+		EIS: "name=Framework", "src=https://github.com/ljr1981/Framework"
+	detail: "[
+		Extended the ARRAY2 class by adding convenience features that make more sense
+		to the casual user.
+		
+		row (i) --> gives back the row at `i'
+		column (i) --> gives back the column at `i'
+		
+		put_row (row, i) --> puts row data at row i
+		put_row_offset (row, i, o) --> puts row data at row i starting at column o (offset)
+		put_column (col, i) --> puts column data at column i
+		put_column_offset (col, i, o) --> puts column data at column i starting at row o (offset)
+		
+		There are perhaps other convenience features as well, but these were the obvious ones.
+		]"
+
 class
 	ARRAY2_EXT [G]
 

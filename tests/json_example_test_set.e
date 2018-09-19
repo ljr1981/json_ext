@@ -148,7 +148,7 @@ feature {NONE} -- Implementation: Constants
 				as a collection of objects, arrays, strings, numbers, etc.
 				]"
 			EIS: "name=json_org_example", "src=http://json.org/example.html"
-			EIS: "name=json_org_description", "src=http://json.org"
+			EIS: "name=json_org_introduction", "src=http://json.org"
 		once
 			Result := json_glossary_string
 		end
