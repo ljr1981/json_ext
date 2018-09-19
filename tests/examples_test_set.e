@@ -3,6 +3,7 @@ note
 		Library Examples
 	]"
 	testing: "type/manual"
+	EIS: "name=example_video", "src=https://youtu.be/G9AiHaYdqzU"
 
 class
 	EXAMPLES_TEST_SET
