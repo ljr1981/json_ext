@@ -113,6 +113,7 @@ For example: If we have a feature called `requestor: REQUESTOR`, which inherits 
 
 We might then write:
 
+```
   local l_key: JSON_STRING
     ...
   create l_key.make_from_string ("requestor")
@@ -120,5 +121,6 @@ We might then write:
   if attached {JSON_OBJECT} json_object_to_json_reference_subobject (l_object, "requestor") as al_object then
     create requestor.make_from_json (al_object.representation)
   end
+```
 
 The `json_object_to_json_reference_subject` call attempts to locate the "requestor" subobject reference attribute in the `l_object`. If it finds it, it creates the corresponding **JSON_OBJECT** and returns it as the Result of the call. If we get back an attached object, then we can call the `make_from_json` feature of the REQUESTOR class with the **{JSON_OBJECT}**.`representation` **STRING** Result, which is the JSON string representation of our resulting subordinate **JSON_OBJECT**.
