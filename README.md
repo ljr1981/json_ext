@@ -7,15 +7,15 @@ Use this library for two purposes: Serialization of Eiffel objects (and object g
 
 Video Examples
 ==============
-Example #1: Simple Serialization and Deserialization—we want to see how to take an Eiffel object and serialize it into a JSON string. We then want to take our JSON string and get our Eiffel object back from it by deserializing it.
+**Example #1: Simple Serialization and Deserialization**—we want to see how to take an Eiffel object and serialize it into a JSON string. We then want to take our JSON string and get our Eiffel object back from it by deserializing it.
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=G9AiHaYdqzU" target="_blank"><img src="http://img.youtube.com/vi/G9AiHaYdqzU/0.jpg" alt="Examples" width="240" height="180" border="10" /></a>
 
-Example #2: Example of JSON to HTML Conversion—we want to convert a JSON string to a simple HTML table.
+**Example #2: Example of JSON to HTML Conversion**—we want to convert a JSON string to a simple HTML table.
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=kyw7eFFvIM0" target="_blank"><img src="http://img.youtube.com/vi/kyw7eFFvIM0/0.jpg" alt="JSON-to-HTML" width="240" height="180" border="10" /></a>
 
-Example #3: Recursive Serialization and Deserialization—like the Example #1 (above), but we want to add a layer of recursion—that is—we want JSON_OBJECT things that have subordinate (or contained) JSON_OBJECTs in them. We want the library to smartly recurse our specified object features, detect when it finds an subordinate JSON_OBJECT and serialize it—recursively walking down the object graph.
+**Example #3: Recursive Serialization and Deserialization**—like the Example #1 (above), but we want to add a layer of recursion—that is—we want JSON_OBJECT things that have subordinate (or contained) JSON_OBJECTs in them. We want the library to smartly recurse our specified object features, detect when it finds an subordinate JSON_OBJECT and serialize it—recursively walking down the object graph.
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=_SloGPXGOow" target="_blank"><img src="http://img.youtube.com/vi/_SloGPXGOow/0.jpg" alt="JSON-to-HTML" width="240" height="180" border="10" /></a>
 
