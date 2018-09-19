@@ -48,6 +48,31 @@ feature -- Example routines
 			assert_strings_equal ("dob", "01/01/1937", l_elmer.date_of_birth.out)
 		end
 
+	simple_recurive_example
+			-- Simple recursive example.
+		note
+			description: "[
+				Create a parent class which has a list of people, where each person
+				object is JSON serializable and deserializable.
+				]"
+		local
+			l_people: MOCK_PEOPLE_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+		do
+				-- Serialization of complex (recursive) object.
+			assert_strings_equal ("people_serializaed", people_json, people.json_out)
+				-- Deserialization ...
+			create l_people.make_from_json (people_json)
+			assert_integers_equal ("people_count_2", 2, l_people.people.count)
+				-- Person 1
+			assert_strings_equal ("elmer_name", elmer_fudd.name, 				l_people.people [1].name)
+			assert_integers_equal ("elmer_age", elmer_fudd.age,					l_people.people [1].age)
+			assert_strings_equal ("elmer_dob", 	elmer_fudd.date_of_birth.out, 	l_people.people [1].date_of_birth.out)
+				-- Person 2
+			assert_strings_equal ("porky_name", "Porky Pig", 	l_people.people [2].name)
+			assert_integers_equal ("porky_age", 83, 			l_people.people [2].age)
+			assert_strings_equal ("porky_dob", 	"03/02/1935", 	l_people.people [2].date_of_birth.out)
+		end
+
 feature {NONE} -- Objects
 
 	bugs_bunny: MOCK_PERSON_FOR_SERIALIZATION_ONLY
@@ -73,6 +98,26 @@ feature {NONE} -- Objects
 			Result.set_age (2018 - Result.date_of_birth.year)
 		end
 
+	porky_pig: MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+			--
+		note
+			EIS: "name=bugsy_birthday", "src=https://en.wikipedia.org/wiki/Elmer_Fudd"
+		once
+			create Result
+			Result.set_name ("Porky Pig")
+			Result.set_date_of_birth (create {DATE}.make (1935, 3, 2))
+			Result.set_age (2018 - Result.date_of_birth.year)
+		end
+
+	people: MOCK_PEOPLE_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+		note
+
+		once
+			create Result
+			Result.people.force (elmer_fudd)
+			Result.people.force (porky_pig)
+		end
+
 feature {NONE} -- JSON Outputs
 
 	bugs_bunny_json: STRING = "[
@@ -81,6 +126,10 @@ feature {NONE} -- JSON Outputs
 
 	elmer_fudd_json: STRING = "[
 {"name":"Elmer Fudd","date_of_birth":"1937/1/1","age":81}
+]"
+
+	people_json: STRING = "[
+{"people":[{"name":"Elmer Fudd","date_of_birth":"1937/1/1","age":81},{"name":"Porky Pig","date_of_birth":"1935/3/2","age":83}]}
 ]"
 
 end
