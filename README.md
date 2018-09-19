@@ -32,7 +32,7 @@ This ARRAY specifies the features that you want to be serialized to JSON from th
 
 	sms_device: detachable STRING
 
-If an object you want to serialize at run-time is `l_my_object' and the local variable is of type JSON_SERIALIZABLE, then to get the JSON string representation of `l_my_object' is as simple as: l_json := l_my_object.out
+If an object you want to serialize at run-time is `l_my_object` and the local variable is of type `JSON_SERIALIZABLE`, then to get the JSON string representation of `l_my_object` is as simple as: `l_json := l_my_object.out`
 
 Deserialization
 ===============
@@ -43,9 +43,9 @@ First--you must inherit from JSON_DESERIALIZABLE. When you do, you must define s
 	convertible_features (a_current: ANY): ARRAY [STRING_8]
 	make_from_json (a_json: STRING_8)
 
-For `convertible_features' see JSON_SERIALIZABLE (above). If your class is both serializable and deserializable, then you only need provide an implementation for `convertible_features' one time thanks to Multiple Inheritance!
+For `convertible_features`see `JSON_SERIALIZABLE` (above). If your class is both serializable and deserializable, then you only need provide an implementation for `convertible_features` one time thanks to Multiple Inheritance!
 
-Second--you must implement the `make_from_json' creation procedure. This procedure must perform some basic steps. For example: Let's look at the `make_from_json' for the class having the `name', `truck_id', and `sms_device' features (above).
+Second--you must implement the `make_from_json` creation procedure. This procedure must perform some basic steps. For example: Let's look at the `make_from_json` for the class having the `name`, `truck_id`, and `sms_device` features (above).
 
 	make_from_json (a_json: STRING)
 			-- <Precursor>
@@ -63,11 +63,11 @@ Second--you must implement the `make_from_json' creation procedure. This procedu
 			sms_device := json_object_to_json_string_representation ("sms_device", l_object)
 		end
 
-Pay special attention to the `*_attached' feature used for the `name' feature. All of the data-type parsing features generally have an attached and detached version. The detached feature version simply excludes the `_attached' suffix. Therefore, in the example, the `truck_id' and `sms_device' are detached and can be Void. The feature called is coded such that the Result of the feature might be Void. This could mean that the feature is represented in the JSON string, but is set to "null", or it could mean that the feature is not in the JSON string and is (as a consequence) Void. Either way--the Result will be Void. If you expect your JSON to have an attached value (e.g. it is both in the JSON string and is not "null"), then use the `*_attached' version of the call. Otherwise, use the detached version.
+Pay special attention to the `*_attached` feature used for the `name` feature. All of the data-type parsing features generally have an attached and detached version. The detached feature version simply excludes the `_attached` suffix. Therefore, in the example, the `truck_id` and `sms_device` are detached and can be Void. The feature called is coded such that the Result of the feature might be Void. This could mean that the feature is represented in the JSON string, but is set to "null", or it could mean that the feature is not in the JSON string and is (as a consequence) Void. Either way--the Result will be Void. If you expect your JSON to have an attached value (e.g. it is both in the JSON string and is not "null"), then use the `*_attached` version of the call. Otherwise, use the detached version.
 
 NOTE: The line with check attached_object: attached l_object end is there because our code expects the JSON to parse without error. If you are unsure of getting well-formed JSON, which is configured precisely as you expect, then you may want to use an if-then-else-end construct to test for parsing issues and handle them appropriately.
 
-You will find features for many possible standard deserialization of JSON->Eiffel data types. In each case, you need to pass the name of the feature from your `convertible_features' ARRAY (list) along with the `l_object' (e.g. JSON_OBJECT, which represents your a_json string as a parsed Eiffel object). For example:
+You will find features for many possible standard deserialization of JSON->Eiffel data types. In each case, you need to pass the name of the feature from your `convertible_features` ARRAY (list) along with the `l_object` (e.g. JSON_OBJECT, which represents your a_json string as a parsed Eiffel object). For example:
 
 JSON -> STRING
 ==============
@@ -101,9 +101,9 @@ Finally, you will find a feature that returns a TUPLE from a JSON string, where 
 
 Object Graphs
 =============
-Many times, you may have Eiffel objects, which reference other subordinate Eiffel objects and you want to store (serialize) and restore (deserialize) them. In either case, the reference feature must be in the `convertible_features' ARRAY. Once there, we can now restore it from a JSON string.
+Many times, you may have Eiffel objects, which reference other subordinate Eiffel objects and you want to store (serialize) and restore (deserialize) them. In either case, the reference feature must be in the `convertible_features` ARRAY. Once there, we can now restore it from a JSON string.
 
-For example: If we have a feature called `requestor: REQUESTOR', which inherits from JSON_DESERIALIZABLE, and the `requestor' is a subordinate child reference, then we want to first extract just the portion of the JSON representing the `requestor' and then hand that JSON string to the `make_from_json' of the REQUESTOR class.
+For example: If we have a feature called `requestor: REQUESTOR`, which inherits from JSON_DESERIALIZABLE, and the `requestor` is a subordinate child reference, then we want to first extract just the portion of the JSON representing the `requestor` and then hand that JSON string to the `make_from_json` of the REQUESTOR class.
 
 We might then write:
 
@@ -115,4 +115,4 @@ We might then write:
     create requestor.make_from_json (al_object.representation)
   end
 
-The `json_object_to_json_reference_subject' call attempts to locate the "requestor" subobject reference attribute in the `l_object'. If it finds it, it creates the corresponding JSON_OBJECT and returns it as the Result of the call. If we get back an attached object, then we can call the `make_from_json' feature of the REQUESTOR class with the {JSON_OBJECT}.representation STRING Result, which is the JSON string representation of our resulting subordinate JSON_OBJECT.
+The `json_object_to_json_reference_subject` call attempts to locate the "requestor" subobject reference attribute in the `l_object`. If it finds it, it creates the corresponding JSON_OBJECT and returns it as the Result of the call. If we get back an attached object, then we can call the `make_from_json` feature of the REQUESTOR class with the {JSON_OBJECT}.representation STRING Result, which is the JSON string representation of our resulting subordinate JSON_OBJECT.
