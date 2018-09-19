@@ -1,17 +1,15 @@
 package json_ext
 
 project
-json_ext = "json_ext.ecf"
+	json_ext = "json_ext.ecf"
 
 note
-title: JSON Extension
-description: "An extension library of convenience classes and features for the Eiffel JSON library."
+	title: JSON Extension
+	description: "An extension library of convenience classes and features for the Eiffel JSON library."
 
-tags: json
-license: Eiffel Forum License v2 (see http://www.eiffel.com/licensing/forum.txt)
-copyright: 1984-2013 Eiffel Software and others
-link[doc]: "Documentation" http://eiffelroom.com/
-link[source]: "GitHub" https://github.com/ljr1981/json_ext
-link[license]: http://www.eiffel.com/licensing/forum.txt
+	tags: json
+	license: Eiffel Forum License v2 
+	copyright: 2018 Larry Rix
+	link[license]: http://www.eiffel.com/licensing/forum.txt external
 
 end
