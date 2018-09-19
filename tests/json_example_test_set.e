@@ -23,6 +23,7 @@ inherit
 feature -- Test routines
 
 	json_example_test
+			-- Example test
 		note
 			detail: "[
 			New test routine

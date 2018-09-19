@@ -38,6 +38,7 @@ feature -- Test routines
 			create l_mock.make_from_json (json_string)
 			assert_strings_equal ("ancestor", "fred", l_mock.ancestor_name)
 			assert_strings_equal ("json", json_string, l_mock.representation_from_current (l_mock))
+			assert_strings_equal ("json_out", json_string, l_mock.json_out)
 		end
 
 feature {NONE} -- Constants
@@ -73,17 +74,41 @@ feature -- Test routines
 
 feature {NONE} -- Constants
 
-	row_1: ARRAY [INTEGER] once Result := <<10, 20, 30, 40>> end
-	row_2: ARRAY [INTEGER] once Result := <<100, 200, 300, 400>> end
-	row_3: ARRAY [INTEGER] once Result := <<1_000, 2_000, 3_000, 4_000>> end
+	row_1: ARRAY [INTEGER]
+			-- Row data
+		once Result := <<10, 20, 30, 40>> end
 
-	col_1: ARRAY [INTEGER] once Result := <<10, 100, 1_000>> end
-	col_2: ARRAY [INTEGER] once Result := <<20, 200, 2_000>> end
-	col_3: ARRAY [INTEGER] once Result := <<30, 300, 3_000>> end
-	col_4: ARRAY [INTEGER] once Result := <<40, 400, 4_000>> end
+	row_2: ARRAY [INTEGER]
+			-- Row data
+		once Result := <<100, 200, 300, 400>> end
 
-	offset_2: ARRAY [INTEGER] once Result := <<-200, -300>> end
-	offset_2_result: ARRAY [INTEGER] once Result := <<100, -200, -300, 400>> end
+	row_3: ARRAY [INTEGER]
+			-- Row data
+		once Result := <<1_000, 2_000, 3_000, 4_000>> end
+
+	col_1: ARRAY [INTEGER]
+			-- Column data
+		once Result := <<10, 100, 1_000>> end
+
+	col_2: ARRAY [INTEGER]
+			-- Column data
+		once Result := <<20, 200, 2_000>> end
+
+	col_3: ARRAY [INTEGER]
+			-- Column data
+		once Result := <<30, 300, 3_000>> end
+
+	col_4: ARRAY [INTEGER]
+			-- Column data
+		once Result := <<40, 400, 4_000>> end
+
+	offset_2: ARRAY [INTEGER]
+			-- Offset data
+		once Result := <<-200, -300>> end
+
+	offset_2_result: ARRAY [INTEGER]
+			-- Offset data
+		once Result := <<100, -200, -300, 400>> end
 
 end
 

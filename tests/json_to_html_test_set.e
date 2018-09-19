@@ -114,7 +114,8 @@ feature {NONE} -- Data
 	</tr>
 </table>
 ]"
-
+		-- Prettified.
+	
 end
 
 

@@ -74,6 +74,7 @@ feature {NONE} -- Initialization
 feature {NONE} -- Implementation: Array Fillers
 
 	fill_arrayed_list_of_strings (a_json_array: JSON_ARRAY): ARRAYED_LIST [STRING]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [STRING]
 		do
@@ -82,6 +83,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_detachable_strings (a_json_array: JSON_ARRAY): ARRAYED_LIST [detachable STRING]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [detachable STRING]
 		do
@@ -90,11 +92,13 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	string_creation_agent (a_json_string: STRING): STRING
+			-- Creation agent for STRING
 		do
 			Result := a_json_string
 		end
 
 	detachable_string_creation_agent (a_json_string: STRING): detachable STRING
+			-- Detached version of `string_creation_agent'.
 		do
 			if not a_json_string.same_string ("null") then
 				Result := a_json_string
@@ -102,6 +106,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_decimals (a_json_array: JSON_ARRAY): ARRAYED_LIST [DECIMAL]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [DECIMAL]
 		do
@@ -110,11 +115,13 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	decimal_creation_agent (a_json_string: STRING): DECIMAL
+			-- Decimal creation agent.
 		do
 			create Result.make_from_string (a_json_string)
 		end
 
 	fill_arrayed_list_of_integers (a_json_array: JSON_ARRAY): ARRAYED_LIST [INTEGER]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [INTEGER]
 		do
@@ -123,6 +130,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	integer_creation_agent (a_json_string: STRING): INTEGER
+			-- Integer creation agent.
 		require
 			is_integer: a_json_string.is_integer
 		do
@@ -130,6 +138,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_booleans (a_json_array: JSON_ARRAY): ARRAYED_LIST [BOOLEAN]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [BOOLEAN]
 		do
@@ -138,6 +147,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	boolean_creation_agent (a_json_string: STRING): BOOLEAN
+			-- Boolean creation agent.
 		require
 			is_boolean: a_json_string.is_boolean
 		do
@@ -145,6 +155,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_naturals (a_json_array: JSON_ARRAY): ARRAYED_LIST [NATURAL]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [NATURAL]
 		do
@@ -153,6 +164,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	natural_creation_agent (a_json_string: STRING): NATURAL
+			-- Natural creation agent.
 		require
 			is_boolean: a_json_string.is_natural
 		do
@@ -160,6 +172,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_reals (a_json_array: JSON_ARRAY): ARRAYED_LIST [REAL]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [REAL]
 		do
@@ -168,6 +181,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	real_creation_agent (a_json_string: STRING): REAL
+			-- Real creation agent.
 		require
 			is_boolean: a_json_string.is_real
 		do
@@ -175,6 +189,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_dates (a_json_array: JSON_ARRAY): ARRAYED_LIST [DATE]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [DATE]
 		do
@@ -183,6 +198,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	date_creation_agent (a_json_string: STRING): DATE
+			-- Date creation agent.
 		do
 			Result := string_to_date (a_json_string, '/')
 		end
@@ -214,6 +230,7 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_OBJECT]
+			-- JSON_OBJECT to list of JSON_OBJECTs
 		do
 			create Result.make (5)
 			across
@@ -226,6 +243,7 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_string_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_STRING]
+			-- JSON_OBJECT to list of JSON_STRING_OBJECTs
 		do
 			create Result.make (5)
 			across
@@ -238,6 +256,7 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_object (a_object: JSON_OBJECT; a_index: INTEGER): detachable JSON_OBJECT
+			-- JSON_OBJECT to JSON_OBJECT
 		local
 			l_objects: ARRAYED_LIST [JSON_OBJECT]
 		do
@@ -254,6 +273,7 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_string_object (a_object: JSON_OBJECT; a_index: INTEGER): detachable JSON_STRING
+			-- JSON_OBJECT to JSON_STRING_OBJECT
 		local
 			l_objects: ARRAYED_LIST [JSON_STRING]
 		do
@@ -318,6 +338,7 @@ feature {NONE} -- Conversions: String
 		end
 
 	json_object_to_json_immutable_string_representation_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): IMMUTABLE_STRING_32
+			-- JSON_OBJECT to IMMUTABLE_STRING_32
 		do
 			check attached json_object_to_json_immutable_string_representation (a_attribute_name, a_object) as al_attached_result then
 				Result := al_attached_result
@@ -535,6 +556,7 @@ feature {NONE} -- Conversions: Date
 		end
 
 	string_to_date (a_string: STRING; a_splitter: CHARACTER): DATE
+			-- String to date
 		local
 			l_specification: LIST [STRING_8]
 			l_dd, l_mm, l_yyyy: INTEGER
@@ -566,6 +588,7 @@ feature {NONE} -- Conversions: Time
 		end
 
 	string_to_time (a_string: STRING; a_splitter: CHARACTER): TIME
+			-- String to time
 		local
 			l_list: LIST [STRING]
 			l_hours, l_minutes, l_seconds: INTEGER
@@ -706,6 +729,7 @@ feature {TEST_SET_BRIDGE} -- Conversions: Mixed Number
 feature {NONE} -- Conversions: Tuple
 
 	json_array_to_eiffel_tuple (a_array: JSON_ARRAY): TUPLE
+			-- JSON_ARRAY to TUPLE
 		local
 			i: INTEGER
 		do
@@ -840,7 +864,9 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation: Constants
 
 	json_true: STRING = "true"
+			-- Constant
 
 	json_false: STRING = "false"
+			-- Constant
 
 end

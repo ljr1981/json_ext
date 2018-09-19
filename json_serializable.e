@@ -52,6 +52,12 @@ inherit
 
 feature -- Access
 
+	json_out: STRING
+			-- Output Current as JSON STRING `representation_from_current'.
+		do
+			Result := representation_from_current (Current)
+		end
+
 	representation_from_current (a_current: ANY): STRING
 			-- JSON representation of Current (`a_current').
 		do
