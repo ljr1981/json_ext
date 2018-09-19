@@ -22,12 +22,7 @@ inherit
 			default_create
 		end
 
-	JSON_SERIALIZABLE
-		undefine
-			default_create
-		end
-
-	JSON_DESERIALIZABLE
+	JSE_AWARE
 		undefine
 			default_create
 		end
