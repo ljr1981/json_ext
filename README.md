@@ -129,3 +129,7 @@ We might then write:
 ```
 
 The `json_object_to_json_reference_subject` call attempts to locate the "requestor" subobject reference attribute in the `l_object`. If it finds it, it creates the corresponding **JSON_OBJECT** and returns it as the Result of the call. If we get back an attached object, then we can call the `make_from_json` feature of the REQUESTOR class with the **{JSON_OBJECT}**.`representation` **STRING** Result, which is the JSON string representation of our resulting subordinate **JSON_OBJECT**.
+
+Markdown Reference
+==================
+[Markdown used for this page](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
