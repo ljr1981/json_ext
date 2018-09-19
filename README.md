@@ -19,7 +19,7 @@ For example:
 			Result := <<"name", "truck_id", "sms_device">>
 		end
 
-This ARRAY defines the features that you want to be serialized to JSON from the existing object at run-time. In this case, the features are (for example) defined as:
+This ARRAY specifies the features that you want to be serialized to JSON from the existing object at run-time. In this case, the features are (for example) defined as:
 
 	name: STRING
 			-- `name' of Current.
