@@ -5,9 +5,9 @@ project
 
 note
 	title: JSON Extension
-	description: "An extension library of convenience classes and features for the Eiffel JSON library."
+	description: "Convenience features on top of the Eiffel JSON library to make the library easier to consume."
 
-	tags: json
+	tags: json,eiffel,extension
 	license: Eiffel Forum License v2 
 	copyright: 2018 Larry Rix
 	link[license]: http://www.eiffel.com/licensing/forum.txt external
