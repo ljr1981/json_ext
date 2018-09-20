@@ -22,13 +22,13 @@
 			<option warning="false">
 			</option>
 		</library>
-		<library name="framework" location="$GITHUB\Framework\framework.ecf"/>
-		<library name="html" location="$GitHub\html\html.ecf"/>
+		<library name="framework" location="iron:framework:framework.ecf"/>
+		<library name="html" location="iron:html:html.ecf"/>
 		<library name="json" location="$ISE_LIBRARY\contrib\library\text\parser\json\library\json-safe.ecf">
 			<option warning="false">
 			</option>
 		</library>
-		<library name="test_extension" location="..\test_extension\test_extension.ecf"/>
+		<library name="test_extension" location="iron:test_extension:test_extension.ecf"/>
 		<library name="time" location="$ISE_LIBRARY\library\time\time-safe.ecf"/>
 		<cluster name="json_ext" location=".\" recursive="true"/>
 	</target>
