@@ -22,12 +22,7 @@ inherit
 			default_create
 		end
 
-	JSON_SERIALIZABLE
-		undefine
-			default_create
-		end
-
-	JSON_DESERIALIZABLE
+	JSE_AWARE
 		undefine
 			default_create
 		end
@@ -295,42 +290,61 @@ feature {NONE} -- Implementation: Representation Constants
 		end
 
 	elmer_net_wowth_representation: STRING = "%"elmer_net_wowth%":%"[0,1,-2]%""
+			-- Representation.
 
 	name_representation: STRING = "%"name%":%"Elmer Fudd%""
+			-- Representation.
 
 	void_name_representation: STRING = "%"void_name%":null"
+			-- Representation.
 
 	immutable_name_representation: STRING = "%"immutable_name%":%"my_immutable_name%""
+			-- Representation.
 
 	hunts_wabbits_representation: STRING = "%"hunts_wabbits%":true"
+			-- Representation.
 
 	has_beard_representation: STRING = "%"has_beard%":false"
+			-- Representation.
 
 	first_appeawance_date_representation: STRING = "%"first_appearance_date%":%"1937/11/29%""
+			-- Representation.
 
 	first_appeawance_date_time_representation: STRING = "%"first_appearance_date_time%":%"1937/11/29/7/15/15%""
+			-- Representation.
 
 	first_appeawance_runtime_representation: STRING = "%"first_appearance_runtime%":%"0/7/0%""
+			-- Representation.
 
 	number_actors_pwaying_elmer_representation: STRING = "%"number_actors_playing_elmer%":%"[0,7,0]%""
+			-- Representation.
 
 	void_decimal_representation: STRING = "%"void_decimal%":null"
+			-- Representation.
 
 	number_of_years_pwayed_by_bwyan_representation: STRING = "%"number_of_years_played_by_bryan%":19"
+			-- Representation.
 
 	year_bwyan_started_representation: STRING = "%"year_bryan_started%":1939"
+			-- Representation.
 
 	years_pwayed_by_mel_bwanc_representation: STRING = "%"years_pwayed_by_mel_blanc%":15"
+			-- Representation.
 
 	years_pwayed_by_fwank_welker_representation: STRING = "%"years_pwayed_by_frank_welker%":1"
+			-- Representation.
 
 	nemesis_count_representation: STRING = "%"nemesis_count%":1"
+			-- Representation.
 
 	height_to_headwidth_watio_representation: STRING = "%"height_to_headwidth_ratio%":0.36619718309859162"
+			-- Representation.
 
 	elmers_friends_representation: STRING = "%"elmers_friends%":[%"Bugs Bunny%",%"Daffy Duck%"]"
+			-- Representation.
 
 	alternate_representation: STRING = "{%"glossary%": {%"title%": %"example glossary%",%"GlossDiv%": {%"title%": %"S%",%"GlossList%": {%"GlossEntry%": {%"ID%": %"SGML%",%"SortAs%": %"SGML%",%"GlossTerm%": %"Standard Generalized Markup Language%",%"Acronym%": %"SGML%",%"Abbrev%": %"ISO 8879:1986%",%"GlossDef%": {%"para%": %"A meta-markup language, used to create markup languages such as DocBook.%",%"GlossSeeAlso%": [%"GML%", %"XML%"]},%"GlossSee%": %"markup%"}}}}}"
+			-- Representation.
 
 end
 

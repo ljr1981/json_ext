@@ -74,6 +74,7 @@ feature {NONE} -- Initialization
 feature {NONE} -- Implementation: Array Fillers
 
 	fill_arrayed_list_of_strings (a_json_array: JSON_ARRAY): ARRAYED_LIST [STRING]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [STRING]
 		do
@@ -82,6 +83,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_detachable_strings (a_json_array: JSON_ARRAY): ARRAYED_LIST [detachable STRING]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [detachable STRING]
 		do
@@ -90,11 +92,13 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	string_creation_agent (a_json_string: STRING): STRING
+			-- Creation agent for STRING
 		do
 			Result := a_json_string
 		end
 
 	detachable_string_creation_agent (a_json_string: STRING): detachable STRING
+			-- Detached version of `string_creation_agent'.
 		do
 			if not a_json_string.same_string ("null") then
 				Result := a_json_string
@@ -102,6 +106,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_decimals (a_json_array: JSON_ARRAY): ARRAYED_LIST [DECIMAL]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [DECIMAL]
 		do
@@ -110,11 +115,13 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	decimal_creation_agent (a_json_string: STRING): DECIMAL
+			-- Decimal creation agent.
 		do
 			create Result.make_from_string (a_json_string)
 		end
 
 	fill_arrayed_list_of_integers (a_json_array: JSON_ARRAY): ARRAYED_LIST [INTEGER]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [INTEGER]
 		do
@@ -123,6 +130,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	integer_creation_agent (a_json_string: STRING): INTEGER
+			-- Integer creation agent.
 		require
 			is_integer: a_json_string.is_integer
 		do
@@ -130,6 +138,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_booleans (a_json_array: JSON_ARRAY): ARRAYED_LIST [BOOLEAN]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [BOOLEAN]
 		do
@@ -138,6 +147,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	boolean_creation_agent (a_json_string: STRING): BOOLEAN
+			-- Boolean creation agent.
 		require
 			is_boolean: a_json_string.is_boolean
 		do
@@ -145,6 +155,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_naturals (a_json_array: JSON_ARRAY): ARRAYED_LIST [NATURAL]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [NATURAL]
 		do
@@ -153,6 +164,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	natural_creation_agent (a_json_string: STRING): NATURAL
+			-- Natural creation agent.
 		require
 			is_boolean: a_json_string.is_natural
 		do
@@ -160,6 +172,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_reals (a_json_array: JSON_ARRAY): ARRAYED_LIST [REAL]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [REAL]
 		do
@@ -168,6 +181,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	real_creation_agent (a_json_string: STRING): REAL
+			-- Real creation agent.
 		require
 			is_boolean: a_json_string.is_real
 		do
@@ -175,6 +189,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	fill_arrayed_list_of_dates (a_json_array: JSON_ARRAY): ARRAYED_LIST [DATE]
+			-- Fill list.
 		local
 			l_filler: JSON_FILLABLES [DATE]
 		do
@@ -183,6 +198,7 @@ feature {NONE} -- Implementation: Array Fillers
 		end
 
 	date_creation_agent (a_json_string: STRING): DATE
+			-- Date creation agent.
 		do
 			Result := string_to_date (a_json_string, '/')
 		end
@@ -206,21 +222,20 @@ feature {NONE} -- Implementation: Basic Operations
 			if a_json [a_json.count] = ')' then
 				a_json [a_json.count] := '}'
 			end
-			create l_parser.make_parser (a_json)
-			if attached l_parser.parse_object as al_object then
+			create l_parser.make_with_string (a_json)
+			l_parser.parse_content
+			if attached l_parser.parsed_json_object as al_object then
 				Result := al_object.twin
 			end
 		end
 
 	json_object_to_json_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_OBJECT]
-		local
-			l_key: JSON_STRING
+			-- JSON_OBJECT to list of JSON_OBJECTs
 		do
 			create Result.make (5)
 			across
 				a_object.current_keys as ic_keys
 			loop
-				l_key := ic_keys.item
 				if attached {JSON_OBJECT} a_object.item (ic_keys.item) as al_object then
 					Result.force (al_object)
 				end
@@ -228,14 +243,12 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_string_objects (a_object: JSON_OBJECT): ARRAYED_LIST [JSON_STRING]
-		local
-			l_key: JSON_STRING
+			-- JSON_OBJECT to list of JSON_STRING_OBJECTs
 		do
 			create Result.make (5)
 			across
 				a_object.current_keys as ic_keys
 			loop
-				l_key := ic_keys.item
 				if attached {JSON_STRING} a_object.item (ic_keys.item) as al_object then
 					Result.force (al_object)
 				end
@@ -243,6 +256,7 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_object (a_object: JSON_OBJECT; a_index: INTEGER): detachable JSON_OBJECT
+			-- JSON_OBJECT to JSON_OBJECT
 		local
 			l_objects: ARRAYED_LIST [JSON_OBJECT]
 		do
@@ -259,6 +273,7 @@ feature {NONE} -- Implementation: Basic Operations
 		end
 
 	json_object_to_json_string_object (a_object: JSON_OBJECT; a_index: INTEGER): detachable JSON_STRING
+			-- JSON_OBJECT to JSON_STRING_OBJECT
 		local
 			l_objects: ARRAYED_LIST [JSON_STRING]
 		do
@@ -292,9 +307,9 @@ feature {NONE} -- Conversions: String
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			if attached {JSON_NULL} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) then
+			if attached {JSON_NULL} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) then
 				Result := Void
-			elseif attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			elseif attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation
 				Result := strip_json_quotes (Result)
 			end
@@ -315,14 +330,15 @@ feature {NONE} -- Conversions: String
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			if attached {JSON_NULL} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) then
+			if attached {JSON_NULL} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) then
 				Result := Void
-			elseif attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			elseif attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				create Result.make_from_string (strip_json_quotes (al_object.representation))
 			end
 		end
 
 	json_object_to_json_immutable_string_representation_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): IMMUTABLE_STRING_32
+			-- JSON_OBJECT to IMMUTABLE_STRING_32
 		do
 			check attached json_object_to_json_immutable_string_representation (a_attribute_name, a_object) as al_attached_result then
 				Result := al_attached_result
@@ -335,7 +351,7 @@ feature {NONE} -- Conversions: String
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
 			create Result.make_empty
-			if attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			if attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation
 			else
 				across a_object as ic_object until not Result.is_empty loop
@@ -356,7 +372,7 @@ feature {NONE} -- Conversions: Boolean
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			if attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			if attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.same_string (json_true)
 			end
 		end
@@ -366,7 +382,7 @@ feature {NONE} -- Conversions: Boolean
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			if attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			if attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.same_string (json_true)
 			else
 				across a_object as ic_object until Result loop
@@ -384,7 +400,7 @@ feature {NONE} -- Conversions: Integer
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_integer_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_integer_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_integer
 			end
 		end
@@ -394,7 +410,7 @@ feature {NONE} -- Conversions: Integer
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_integer_8_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_integer_8_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_integer_8
 			end
 		end
@@ -404,7 +420,7 @@ feature {NONE} -- Conversions: Integer
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_integer_16_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_integer_16_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_integer_16
 			end
 		end
@@ -414,7 +430,7 @@ feature {NONE} -- Conversions: Integer
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_integer_32_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_integer_32_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_integer_32
 			end
 		end
@@ -424,7 +440,7 @@ feature {NONE} -- Conversions: Integer
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			if attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			if attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_integer_32
 			else
 				across a_object as ic_object until Result > 0 loop
@@ -440,7 +456,7 @@ feature {NONE} -- Conversions: Integer
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_integer_64_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_integer_64_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_integer_64
 			end
 		end
@@ -452,7 +468,7 @@ feature {NONE} -- Conversions: Naturals
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_natural_8_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_natural_8_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_natural_8
 			end
 		end
@@ -462,7 +478,7 @@ feature {NONE} -- Conversions: Naturals
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_natural_16_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_natural_16_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_natural_16
 			end
 		end
@@ -472,7 +488,7 @@ feature {NONE} -- Conversions: Naturals
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_natural_32_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_natural_32_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_natural_32
 			end
 		end
@@ -482,7 +498,7 @@ feature {NONE} -- Conversions: Naturals
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_natural_64_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_natural_64_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_natural_64
 			end
 		end
@@ -494,7 +510,7 @@ feature {NONE} -- Conversions: Real
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_real_32_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_real_32_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_real_32
 			end
 		end
@@ -504,7 +520,7 @@ feature {NONE} -- Conversions: Real
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			check json_real_64_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			check json_real_64_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				Result := al_object.representation.to_real_64
 			end
 		end
@@ -517,7 +533,7 @@ feature {NONE} -- Conversions: Date
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
 			create Result.make_now
-			check json_date_value: attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_string then
+			check json_date_value: attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_string then
 				Result := json_string_to_date (al_string)
 			end
 		end
@@ -528,7 +544,7 @@ feature {NONE} -- Conversions: Date
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
 			create Result.make_now
-			if attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_string then
+			if attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_string then
 				Result := json_string_to_date (al_string)
 			end
 		end
@@ -540,6 +556,7 @@ feature {NONE} -- Conversions: Date
 		end
 
 	string_to_date (a_string: STRING; a_splitter: CHARACTER): DATE
+			-- String to date
 		local
 			l_specification: LIST [STRING_8]
 			l_dd, l_mm, l_yyyy: INTEGER
@@ -559,7 +576,7 @@ feature {NONE} -- Conversions: Time
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
 			create Result.make_now
-			check json_time_value: attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_string then
+			check json_time_value: attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_string then
 				Result := json_string_to_time (al_string)
 			end
 		end
@@ -571,6 +588,7 @@ feature {NONE} -- Conversions: Time
 		end
 
 	string_to_time (a_string: STRING; a_splitter: CHARACTER): TIME
+			-- String to time
 		local
 			l_list: LIST [STRING]
 			l_hours, l_minutes, l_seconds: INTEGER
@@ -590,7 +608,7 @@ feature {NONE} -- Conversions: Date-Time
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
-			if attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_string then
+			if attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_string then
 				Result := json_string_to_date_time (al_string)
 			end
 		end
@@ -601,7 +619,7 @@ feature {NONE} -- Conversions: Date-Time
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
 			create Result.make_now
-			check json_time_date_value: attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_string then
+			check json_time_date_value: attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_string then
 				Result := json_string_to_date_time (al_string)
 			end
 		end
@@ -631,18 +649,15 @@ feature {TEST_SET_HELPER} -- Conversions: Decimal
 			-- Deserialize actual DECIMAL value for `a_attribute_name' from `a_object'.
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
-		local
-			l_string: STRING
 		do
 			create Result
-			create l_string.make_empty
-			check attached {JSON_OBJECT} a_object as al_object then
-				if attached {JSON_NULL} al_object.item (create {JSON_STRING}.make_json (a_attribute_name)) then
+--			check attached {JSON_OBJECT} a_object as al_object then
+				if attached {JSON_NULL} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) then
 					Result := Void
-				elseif attached {JSON_STRING} al_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_value then
+				elseif attached {JSON_STRING} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_value then
 					Result := json_string_to_decimal (al_value)
 				end
-			end
+--			end
 		end
 
 	json_object_to_decimal_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): DECIMAL
@@ -714,6 +729,7 @@ feature {TEST_SET_BRIDGE} -- Conversions: Mixed Number
 feature {NONE} -- Conversions: Tuple
 
 	json_array_to_eiffel_tuple (a_array: JSON_ARRAY): TUPLE
+			-- JSON_ARRAY to TUPLE
 		local
 			i: INTEGER
 		do
@@ -749,7 +765,7 @@ feature {NONE} -- Conversions: Tuple
 			-- Deserialize actual TUPLE value for `a_attribute_name' from `a_object'.
 		do
 			create Result.make_empty
-			if attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			if attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				if attached {JSON_ARRAY} al_object as al_array then
 					Result := al_array
 				elseif attached {JSON_STRING} al_object as al_string then
@@ -765,8 +781,8 @@ feature {NONE} -- Conversions: Tuple
 	json_object_to_json_array (a_attribute_name: STRING; a_object: JSON_OBJECT): JSON_ARRAY
 			-- Deserialize actual ARRAY value for `a_attribute_name' from `a_object'.
 		do
-			create Result.make_array
-			check json_array_value: attached a_object.item (create {JSON_STRING}.make_json (a_attribute_name)) as al_object then
+			create Result.make (1_000)
+			check json_array_value: attached a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_object then
 				if attached {JSON_ARRAY} al_object as al_array then
 					Result := al_array
 				else
@@ -848,7 +864,9 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation: Constants
 
 	json_true: STRING = "true"
+			-- Constant
 
 	json_false: STRING = "false"
+			-- Constant
 
 end

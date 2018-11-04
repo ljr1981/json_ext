@@ -52,6 +52,12 @@ inherit
 
 feature -- Access
 
+	json_out: STRING
+			-- Output Current as JSON STRING `representation_from_current'.
+		do
+			Result := representation_from_current (Current)
+		end
+
 	representation_from_current (a_current: ANY): STRING
 			-- JSON representation of Current (`a_current').
 		do
@@ -80,10 +86,7 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 		local
 			i, j: INTEGER
 			l_key: STRING
-			l_json_key: JSON_STRING
-			l_json_value: detachable JSON_VALUE
 			l_field: detachable ANY
-			l_is_void: BOOLEAN
 			l_reflector: INTERNAL
 			l_hash: HASH_TABLE [BOOLEAN, STRING]
 			l_convertible_features: ARRAYED_LIST [STRING]
@@ -109,11 +112,8 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 					l_hash.force (True, l_key)
 					check has_key: l_hash.has_key (l_key) end
 					l_field := l_reflector.field (j, a_object)
-					create l_json_key.make_json (l_key)
-					l_json_value := Void
-					l_is_void := False
 					if is_not_persisting_long_strings and then attached {READABLE_STRING_GENERAL} l_field as al_string and then al_string.count > long_string_character_count then
-						Result.put (create {JSON_STRING}.make_json_from_string_32 (long_string_tag), l_key)
+						Result.put (create {JSON_STRING}.make_from_string_32 (long_string_tag), l_key)
 					else
 						Result.put (eiffel_to_json (l_field, l_key), l_key)
 					end
@@ -133,30 +133,28 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 		local
 			k: INTEGER
 		do
-			create Result.make_array
-			if attached {ARRAY [detachable ANY]} a_array as al_array then
-				from k := 1
-				until k > al_array.count
-				loop
-					if attached al_array.item (k) as al_item then
-						if attached {JSON_SERIALIZABLE} al_item as al_convertible then
-							Result.add (al_convertible.eiffel_object_to_json_object (al_convertible))
-						elseif attached {ARRAY [detachable ANY]} al_item as al_array_item then
-							Result.add (eiffel_array_to_json_array (al_array_item))
-						elseif attached {ARRAYED_LIST [detachable ANY]} al_item as al_arrayed_list_item then
-							Result.add (eiffel_arrayed_list_to_json_array (al_arrayed_list_item))
-						else
-							if attached eiffel_any_to_json_value ("element_" + k.out, al_item) as al_value then
-								Result.add (al_value)
-							else
-								Result.add (create {JSON_NULL})
-							end
-						end
+			create Result.make (a_array.count)
+			from k := 1
+			until k > a_array.count
+			loop
+				if attached a_array.item (k) as al_item then
+					if attached {JSON_SERIALIZABLE} al_item as al_convertible then
+						Result.add (al_convertible.eiffel_object_to_json_object (al_convertible))
+					elseif attached {ARRAY [detachable ANY]} al_item as al_array_item then
+						Result.add (eiffel_array_to_json_array (al_array_item))
+					elseif attached {ARRAYED_LIST [detachable ANY]} al_item as al_arrayed_list_item then
+						Result.add (eiffel_arrayed_list_to_json_array (al_arrayed_list_item))
 					else
-						Result.add (create {JSON_NULL})
+						if attached eiffel_any_to_json_value ("element_" + k.out, al_item) as al_value then
+							Result.add (al_value)
+						else
+							Result.add (create {JSON_NULL})
+						end
 					end
-					k := k + 1
+				else
+					Result.add (create {JSON_NULL})
 				end
+				k := k + 1
 			end
 		end
 
@@ -166,32 +164,30 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 		local
 			k: INTEGER
 		do
-			create Result.make_array
-			if attached {ARRAYED_LIST [detachable ANY]} a_arrayed_list as al_arrayed_list then
-				from al_arrayed_list.start
-				until al_arrayed_list.exhausted
-				loop
-					if attached al_arrayed_list.item_for_iteration as al_item then
-						if attached {JSON_SERIALIZABLE} al_item as al_convertible then
-							Result.add (al_convertible.eiffel_object_to_json_object (al_convertible))
-						elseif attached {ARRAY [detachable ANY]} al_item as al_array_item then
-							Result.add (eiffel_array_to_json_array (al_array_item))
-						elseif attached {ARRAYED_LIST [detachable ANY]} al_item as al_arrayed_list_item then
-							Result.add (eiffel_arrayed_list_to_json_array (al_arrayed_list_item))
-						elseif attached {DECIMAL} al_item as al_decimal then
-							Result.add (create {JSON_STRING}.make_from_string (al_decimal.to_engineering_string))
-						else
-							if attached eiffel_any_to_json_value ("element_" + k.out, al_item) as al_value then
-								Result.add (al_value)
-							else
-								Result.add (create {JSON_NULL})
-							end
-						end
+			create Result.make (a_arrayed_list.count)
+			from a_arrayed_list.start
+			until a_arrayed_list.exhausted
+			loop
+				if attached a_arrayed_list.item_for_iteration as al_item then
+					if attached {JSON_SERIALIZABLE} al_item as al_convertible then
+						Result.add (al_convertible.eiffel_object_to_json_object (al_convertible))
+					elseif attached {ARRAY [detachable ANY]} al_item as al_array_item then
+						Result.add (eiffel_array_to_json_array (al_array_item))
+					elseif attached {ARRAYED_LIST [detachable ANY]} al_item as al_arrayed_list_item then
+						Result.add (eiffel_arrayed_list_to_json_array (al_arrayed_list_item))
+					elseif attached {DECIMAL} al_item as al_decimal then
+						Result.add (create {JSON_STRING}.make_from_string (al_decimal.to_engineering_string))
 					else
-						Result.add (create {JSON_NULL})
+						if attached eiffel_any_to_json_value ("element_" + k.out, al_item) as al_value then
+							Result.add (al_value)
+						else
+							Result.add (create {JSON_NULL})
+						end
 					end
-					al_arrayed_list.forth
+				else
+					Result.add (create {JSON_NULL})
 				end
+				a_arrayed_list.forth
 			end
 		end
 
@@ -206,11 +202,11 @@ feature {NONE} -- Implementation: Keyed Conversions
 			l_numerator: JSON_NUMBER
 			l_denominator: JSON_NUMBER
 		do
-			create l_negative.make_boolean (a_mixed_number.is_negative)
+			create l_negative.make (a_mixed_number.is_negative)
 			create l_whole_part.make_integer (a_mixed_number.whole_part.as_integer_64)
 			create l_numerator.make_integer (a_mixed_number.numerator)
 			create l_denominator.make_integer (a_mixed_number.denominator)
-			create Result.make_array
+			create Result.make (4)
 			Result.add (l_negative)
 			Result.add (l_whole_part)
 			Result.add (l_numerator)
@@ -231,7 +227,7 @@ feature {NONE} -- Implementation: Keyed Conversions
 		local
 			i: INTEGER
 		do
-			create Result.make_array
+			create Result.make (a_tuple.count)
 			from i := 1
 			until i > a_tuple.count
 			loop
@@ -247,55 +243,48 @@ feature {NONE} -- Implementation: Keyed Conversions
 			--| The `out_tuple' produces a tuple in the form of: [negative, coefficient, exponent]
 			--| For example: 99.9 = [0,999,-1]
 		do
-			if attached a_decimal as al_decimal then
-				create Result.make_json_from_string_32 (al_decimal.out_tuple)
+			if attached {DECIMAL} a_decimal as al_decimal then
+				create Result.make_from_string_32 (al_decimal.out_tuple)
 			else
-				create Result.make_json_from_string_32 ("void")
+				create Result.make_from_string_32 ("void")
 			end
 		end
 
 	eiffel_date_to_json_string (a_key: STRING; a_date: DATE): JSON_STRING
 			-- Convert `a_date' to JSON_STRING with `a_key'
 		do
-			create Result.make_json_from_string_32 (a_date.year.out + "/" + a_date.month.out + "/" + a_date.day.out)
+			create Result.make_from_string_32 (a_date.year.out + "/" + a_date.month.out + "/" + a_date.day.out)
 		end
 
 	eiffel_time_to_json_string (a_key: STRING; a_time: TIME): JSON_STRING
 			-- Convert `a_time' to JSON_STRING with `a_key'
 		do
-			create Result.make_json_from_string_32 (a_time.hour.out + "/" + a_time.minute.out + "/" + a_time.second.out)
+			create Result.make_from_string_32 (a_time.hour.out + "/" + a_time.minute.out + "/" + a_time.second.out)
 		end
 
 	eiffel_date_time_to_json_string (a_key: STRING; a_date_time: DATE_TIME): JSON_STRING
 			-- Convert `a_date_time' to JSON_STRING with `a_key'
 		do
-			create Result.make_json_from_string_32 (a_date_time.year.out + "/" + a_date_time.month.out + "/" + a_date_time.day.out + "/" + a_date_time.hour.out + "/" + a_date_time.minute.out + "/" + a_date_time.second.out)
+			create Result.make_from_string_32 (a_date_time.year.out + "/" + a_date_time.month.out + "/" + a_date_time.day.out + "/" + a_date_time.hour.out + "/" + a_date_time.minute.out + "/" + a_date_time.second.out)
 		end
 
 	eiffel_any_to_json_value (a_key: STRING; a_field: separate ANY): detachable JSON_VALUE
 			-- If possible, convert various Eiffel types to JSON types given `a_key', `a_field'.
-		local
-			l_json_key: JSON_STRING
-			l_json_value: detachable JSON_VALUE
-			l_is_void: BOOLEAN
 		do
 			create {JSON_NULL} Result
-			create l_json_key.make_json_from_string_32 (a_key)
-			l_json_value := Void
-			l_is_void := False
 
 			if attached {JSON_SERIALIZABLE} a_field as al_convertible then
 				Result := al_convertible.eiffel_object_to_json_object (al_convertible)
 			elseif attached {CHARACTER_8} a_field as al_field then
-				create {JSON_STRING} Result.make_json_from_string_32 (al_field.out)
+				create {JSON_STRING} Result.make_from_string_32 (al_field.out)
 			elseif attached {IMMUTABLE_STRING_8} a_field as al_field then
-				create {JSON_STRING} Result.make_json_from_string_32 (al_field.out)
+				create {JSON_STRING} Result.make_from_string_32 (al_field.out)
 			elseif attached {IMMUTABLE_STRING_32} a_field as al_field then
-				create {JSON_STRING} Result.make_json_from_string_32 (al_field.out)
+				create {JSON_STRING} Result.make_from_string_32 (al_field.out)
 			elseif attached {STRING_8} a_field as al_field then
-				create {JSON_STRING} Result.make_json_from_string_32 (al_field)
+				create {JSON_STRING} Result.make_from_string_32 (al_field)
 			elseif attached {STRING_32} a_field as al_field then
-				create {JSON_STRING} Result.make_json_from_string_32 (al_field)
+				create {JSON_STRING} Result.make_from_string_32 (al_field)
 			elseif attached {INTEGER_8} a_field as al_integer then
 				create {JSON_NUMBER} Result.make_integer (al_integer)
 			elseif attached {INTEGER_16} a_field as al_integer then
@@ -317,7 +306,7 @@ feature {NONE} -- Implementation: Keyed Conversions
 			elseif attached {REAL_64} a_field as al_real then
 				create {JSON_NUMBER} Result.make_real (al_real)
 			elseif attached {BOOLEAN} a_field as al_boolean then
-				create {JSON_BOOLEAN} Result.make_boolean (al_boolean)
+				create {JSON_BOOLEAN} Result.make (al_boolean)
 			elseif attached {TUPLE [detachable ANY]} a_field as al_tuple then
 				Result := eiffel_tuple_to_json_array (a_key, al_tuple)
 			elseif attached {FW_MIXED_NUMBER} a_field as al_mixed_number then
@@ -355,7 +344,7 @@ feature {NONE} -- Implementation: Keyed Conversions
 				Result := eiffel_mixed_number_json_array (a_key, al_mixed_number)
 			elseif attached {DECIMAL} a_field as al_decimal then
 				Result := eiffel_decimal_to_json_string (a_key, al_decimal)
-			elseif attached a_field as al_field then
+			elseif attached {ANY} a_field as al_field then
 				Result := eiffel_any_to_json_value (a_key, al_field)
 			end
 

@@ -41,6 +41,7 @@ feature -- Test routines
 			-- Test `representation_from_current'
 		do
 			assert_equal ("current_representation_consistent", current_representation, representation_from_current (Current))
+			assert_equal ("current_representation_consistent", current_representation, json_out)
 		end
 
 	test_eiffel_object_to_json_object

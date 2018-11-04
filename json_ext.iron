@@ -1,0 +1,15 @@
+package json_ext
+
+project
+	json_ext = "json_ext.ecf"
+
+note
+	title: JSON Extension
+	description: "Convenience classes on top of the Eiffel eJSON library"
+
+	tags: json,eiffel,extension
+	license: Eiffel Forum License v2 
+	copyright: 2018 Larry Rix
+	link[license]: http://www.eiffel.com/licensing/forum.txt external
+
+end

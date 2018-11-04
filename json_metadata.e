@@ -356,6 +356,7 @@ feature -- Setters
 feature -- Constants
 
 	valid_type_identifiers: ARRAY [STRING]
+			-- List of `valid_type_identifiers'.
 		once
 			Result := <<
 						"text",
