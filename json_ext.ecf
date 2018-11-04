@@ -22,6 +22,7 @@
 			<option warning="false">
 			</option>
 		</library>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 		<library name="framework" location="$GITHUB\Framework\framework.ecf"/>
 		<library name="framework" location="iron:framework:framework.ecf"/>
@@ -29,6 +30,11 @@
 =======
 		<library name="framework" location="iron:framework:framework.ecf"/>
 >>>>>>> Stashed changes
+=======
+		<library name="framework" location="$GITHUB\Framework\framework.ecf"/>
+		<library name="framework" location="iron:framework:framework.ecf"/>
+		<library name="html" location="iron:html:html.ecf"/>
+>>>>>>> master
 		<library name="json" location="$ISE_LIBRARY\contrib\library\text\parser\json\library\json-safe.ecf">
 			<option warning="false">
 			</option>
