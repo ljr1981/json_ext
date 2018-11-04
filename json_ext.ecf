@@ -18,17 +18,11 @@
 			<void_safety support="transitional" use="transitional"/>
 		</capability>
 		<library name="base" location="$ISE_LIBRARY\library\base\base-safe.ecf"/>
-		<library name="decimal" location="$ISE_LIBRARY\contrib\library\math\decimal\decimal\decimal-safe.ecf">
-			<option warning="false">
-			</option>
-		</library>
+		<library name="decimal" location="iron:decimal:decimal\decimal.ecf"/>
 		<library name="framework" location="iron:framework:framework.ecf"/>
-		<library name="json" location="$ISE_LIBRARY\contrib\library\text\parser\json\library\json-safe.ecf">
-			<option warning="false">
-			</option>
-		</library>
+		<library name="json" location="iron:json:library\json.ecf"/>
 		<library name="test_extension" location="iron:test_extension:test_extension.ecf"/>
-		<library name="time" location="$ISE_LIBRARY\library\time\time-safe.ecf"/>
+		<library name="time" location="iron:time:time.ecf"/>
 		<cluster name="json_ext" location=".\" recursive="true"/>
 	</target>
 	<target name="test" extends="json_ext">
