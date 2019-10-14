@@ -40,3 +40,13 @@ Icon
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+
+# Eiffel IRON Related
+iron_archive.bat
+iron_share_create.bat
+iron_share_update.bat
+LICENSE.txt
+tar_exclude_patterns.txt
+cast_iron.dat
+
