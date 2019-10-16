@@ -12,6 +12,10 @@ $RECYCLE.BIN/
 EIFGENs
 exception_trace.log
 class_attribute.rc
+archive.tar.bz2
+cast_iron.dat
+iron_*.bat
+tar_*.txt
 
 # Windows Installer files
 *.cab
