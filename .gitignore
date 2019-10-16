@@ -48,8 +48,6 @@ Icon
 
 # Eiffel IRON Related
 cast_iron.dat
-iron_archive.bat
-iron_share_create.bat
-iron_share_update.bat
-json_ext.iron
-tar_exclude_patterns.txt
+iron_*.*
+*.iron
+tar_*.txt
