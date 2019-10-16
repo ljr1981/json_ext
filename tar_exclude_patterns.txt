@@ -1,7 +1,5 @@
 ./.git*
 ./EIFGENs
-./EIFGENs*
-./*EIFGENs*
 ./*.bz2
 iron_share_create.bat
 iron_share_update.bat

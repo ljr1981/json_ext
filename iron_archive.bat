@@ -1,1 +1,1 @@
-tar --exclude=EIFGENs --exclude=.git --exclude=*.bat --exclude=tar*.txt --exclude=.git* --exclude=*.bz2 --exclude=*.cmd --exclude=*.dat --exclude=*.pdf -jcvf ".\archive.tar.bz2" "."
+tar -jcvf ".\archive.tar.bz2" "." --exclude-from="tar_exclude_patterns.txt"
