@@ -45,31 +45,32 @@ feature {NONE} -- Events
 			l_any: detachable ANY
 		do
 			l_object := json_string_to_json_object (a_json)
-			check attached_object: attached l_object end
-			elmer_net_wowth := json_object_to_decimal_attached ("elmer_net_wowth", l_object)
-			name := json_object_to_json_string_representation_attached ("name", l_object)
+			check attached_object: attached l_object as al_object then
+				elmer_net_wowth := json_object_to_decimal_attached ("elmer_net_wowth", al_object)
+				name := json_object_to_json_string_representation_attached ("name", al_object)
 
-			l_any := json_object_to_json_string_representation ("void_name", l_object)
-			check valid_void_name: not attached l_any end
+				l_any := json_object_to_json_string_representation ("void_name", al_object)
+				check valid_void_name: not attached l_any end
 
-			void_name := json_object_to_json_string_representation ("void_name", l_object)
-			immutable_name := json_object_to_json_immutable_string_representation_attached ("immutable_name", l_object)
-			hunts_wabbits := json_object_to_boolean ("hunts_wabbits", l_object)
-			has_beard := json_object_to_boolean ("has_beard", l_object)
-			first_appeawance_date := json_object_to_date_attached ("first_appearance_date", l_object)
-			first_appeawance_date_time := json_object_to_date_time_attached ("first_appearance_date_time", l_object)
-			first_appeawance_runtime := json_object_to_time ("first_appearance_runtime", l_object)
-			number_of_actors_pwaying_elmer := json_object_to_decimal_attached ("number_actors_playing_elmer", l_object)
-			check valid_void_decimal: json_object_to_decimal ("void_decimal", l_object) = Void end
-			void_decimal := json_object_to_decimal ("void_decimal", l_object)
-			number_of_years_pwayed_by_bryan := json_object_to_integer ("number_of_years_played_by_bryan", l_object)
-			year_bwyan_started := json_object_to_natural_16 ("year_bryan_started", l_object)
-			years_pwayed_by_mel_bwanc := json_object_to_natural_32 ("years_pwayed_by_mel_blanc", l_object)
-			years_pwayed_by_fwank_welker := json_object_to_natural_64 ("years_pwayed_by_frank_welker", l_object)
-			nemesis_count := json_object_to_natural_8 ("nemesis_count", l_object)
-			height_to_headwidth_watio := json_object_to_real_64 ("height_to_headwidth_ratio", l_object)
-			elmers_fwiends := set_elmers_friends (json_object_to_tuple_as_json_array ("elmers_friends", l_object))
-			elmers_things := fill_elmers_things (json_object_to_tuple_as_json_array ("elmers_things", l_object))
+				void_name := json_object_to_json_string_representation ("void_name", al_object)
+				immutable_name := json_object_to_json_immutable_string_representation_attached ("immutable_name", al_object)
+				hunts_wabbits := json_object_to_boolean ("hunts_wabbits", al_object)
+				has_beard := json_object_to_boolean ("has_beard", al_object)
+				first_appeawance_date := json_object_to_date_attached ("first_appearance_date", al_object)
+				first_appeawance_date_time := json_object_to_date_time_attached ("first_appearance_date_time", al_object)
+				first_appeawance_runtime := json_object_to_time ("first_appearance_runtime", al_object)
+				number_of_actors_pwaying_elmer := json_object_to_decimal_attached ("number_actors_playing_elmer", al_object)
+				check valid_void_decimal: json_object_to_decimal ("void_decimal", al_object) = Void end
+				void_decimal := json_object_to_decimal ("void_decimal", al_object)
+				number_of_years_pwayed_by_bryan := json_object_to_integer ("number_of_years_played_by_bryan", al_object)
+				year_bwyan_started := json_object_to_natural_16 ("year_bryan_started", al_object)
+				years_pwayed_by_mel_bwanc := json_object_to_natural_32 ("years_pwayed_by_mel_blanc", al_object)
+				years_pwayed_by_fwank_welker := json_object_to_natural_64 ("years_pwayed_by_frank_welker", al_object)
+				nemesis_count := json_object_to_natural_8 ("nemesis_count", al_object)
+				height_to_headwidth_watio := json_object_to_real_64 ("height_to_headwidth_ratio", al_object)
+				elmers_fwiends := set_elmers_friends (json_object_to_tuple_as_json_array ("elmers_friends", al_object))
+				elmers_things := fill_elmers_things (json_object_to_tuple_as_json_array ("elmers_things", al_object))
+			end
 		end
 
 feature -- Test routines

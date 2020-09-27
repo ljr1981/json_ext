@@ -36,8 +36,10 @@ feature {NONE} -- Initialization
 			check attached_object: attached l_object end		-- This proves that our JSON parsing was okay.
 
 				-- {STRING}s
-			ancestor_name := json_object_to_json_string_representation_attached ("ancestor_name", l_object)
-			descendant_name := json_object_to_json_string_representation_attached ("descendant_name", l_object)
+			if attached l_object as al_object then
+				ancestor_name := json_object_to_json_string_representation_attached ("ancestor_name", al_object)
+				descendant_name := json_object_to_json_string_representation_attached ("descendant_name", al_object)
+			end
 		end
 
 feature -- Access
