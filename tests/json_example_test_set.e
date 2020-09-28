@@ -5,20 +5,7 @@ class
 	JSON_EXAMPLE_TEST_SET
 
 inherit
-	EQA_TEST_SET
-		rename
-			assert as assert_old
-		end
-
-	EQA_COMMONLY_USED_ASSERTIONS
-		undefine
-			default_create
-		end
-
-	TEST_SET_BRIDGE
-		undefine
-			default_create
-		end
+	TEST_SET_SUPPORT
 
 feature -- Test routines
 

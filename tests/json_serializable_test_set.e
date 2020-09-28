@@ -5,21 +5,9 @@ class
 	JSON_SERIALIZABLE_TEST_SET
 
 inherit
-	EQA_TEST_SET
-		rename
-			assert as assert_old
+	TEST_SET_SUPPORT
 		redefine
 			on_prepare
-		end
-
-	EQA_COMMONLY_USED_ASSERTIONS
-		undefine
-			default_create
-		end
-
-	TEST_SET_BRIDGE
-		undefine
-			default_create
 		end
 
 	JSON_SERIALIZABLE
