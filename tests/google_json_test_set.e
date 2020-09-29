@@ -19,6 +19,7 @@ feature -- Test routines
 			-- Test Google Calendar Resource and End-event JSON Serialization and Deserialization
 		note
 			testing:  "execution/isolated", "execution/serial"
+			EIS: "name=Resource representations", "src=https://developers.google.com/calendar/v3/reference/events"
 		local
 			l_end_event: MOCK_END_EVENT
 			l_resource: MOCK_RESOURCE
@@ -33,7 +34,6 @@ feature -- Test routines
 				-- Create a Resource with the Event and ensure end_event becomes just end in the JSON output.
 			create l_resource.make_with_end_event (l_end_event)
 			assert_strings_equal ("resource", json_resource, l_resource.json_out)
-
 		end
 
 feature {NONE} -- Implementation: JSON

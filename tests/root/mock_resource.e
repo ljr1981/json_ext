@@ -1,5 +1,6 @@
 note
 	description: "A Mock Google Calendar Resource"
+	EIS: "name=Resource representations", "src=https://developers.google.com/calendar/v3/reference/events"
 
 class
 	MOCK_RESOURCE
@@ -20,6 +21,8 @@ feature {NONE} -- Initialization
 			-- Creation from `a_end_event'.
 		do
 			end_event := a_end_event
+		ensure
+			set: end_event ~ a_end_event
 		end
 
 	make_from_json (a_json: STRING)
