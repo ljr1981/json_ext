@@ -17,6 +17,7 @@ feature {NONE} -- Initialization
 
 	make_from_json (a_json: STRING)
 			--<Precursor>
+			-- Ensure `date', `datetime', and `timezone' are found and extracted.
 		require else
 			True
 		local
@@ -33,25 +34,27 @@ feature {NONE} -- Initialization
 feature {NONE} -- Constants
 
 	datetime_identifier: STRING = "dateTime"
+			-- A camel-cased dateTime identifier to match Google.
 
 	timezone_identifier: STRING = "timeZone"
+			-- A camel-cased timeZone identifier to match Google.
 
 feature -- Access
 
 	date: DATE
-			--
+			-- What is the `date' of the Event?
 		attribute
 			create Result.make_now
 		end
 
 	datetime: DATE_TIME
-			--
+			-- What is the `datetime' of the Event?
 		attribute
 			create Result.make_now
 		end
 
 	timeZone: STRING
-			--
+			-- What `timezone' is the Event in?
 		attribute
 			create Result.make_empty
 		end
@@ -60,6 +63,7 @@ feature -- Output
 
 	json_out: STRING
 			--<Precursor>
+			--Reformat datetime and timezone to camel-cased versions per Google.
 		do
 			Result := Precursor
 			Result.replace_substring_all ("datetime", "dateTime")
@@ -80,6 +84,7 @@ feature {NONE} -- Implementation
 
 	convertible_features (a_object: ANY): ARRAY [STRING]
 			-- <Precursor>
+			-- Never use the camel-casing here. This is for Eiffel reference.
 		once ("object")
 			Result := <<
 						"date",
