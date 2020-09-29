@@ -6,9 +6,9 @@ class
 
 inherit
 	JSE_AWARE
---		redefine
---			json_out
---		end
+		redefine
+			json_out
+		end
 
 create
 	make_from_json
@@ -24,8 +24,8 @@ feature {NONE} -- Initialization
 		do
 			l_object := json_string_to_json_object (a_json)
 			check attached l_object as al_object then
-				create date.make_from_string_default (json_object_to_json_string_representation_attached ("date", l_object))
-				create datetime.make_from_string_default (json_object_to_json_string_representation_attached (datetime_identifier, l_object))
+				create date.make_from_string (json_object_to_json_string_representation_attached ("date", l_object), "yyyy/[0]mm/[0]dd")
+				create datetime.make_from_string (json_object_to_json_string_representation_attached (datetime_identifier, l_object), "yyyy/[0]mm/[0]dd hh24:[0]mi:[0]ss")
 				timezone := json_object_to_json_string_representation_attached (timezone_identifier, l_object)
 			end
 		end
@@ -56,15 +56,15 @@ feature -- Access
 			create Result.make_empty
 		end
 
---feature -- Output
+feature -- Output
 
---	json_out: STRING
---			--<Precursor>
---		do
---			Result := Precursor
---			Result.replace_substring_all ("datetime", "dateTime")
---			Result.replace_substring_all ("timezone", "timeZone")
---		end
+	json_out: STRING
+			--<Precursor>
+		do
+			Result := Precursor
+			Result.replace_substring_all ("datetime", "dateTime")
+			Result.replace_substring_all ("timezone", "timeZone")
+		end
 
 feature {NONE} -- Implementation
 
