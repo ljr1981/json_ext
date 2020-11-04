@@ -24,7 +24,7 @@ note
 			
 			This class uses reflection (e.g. {INTERNAL}) together with a list of convertible features
 			to know what features are to be serialized into JSON. The list of features, is checked in
-			a once to ensure the features are valid for the class and any descendant.
+			a once dynamically to ensure the features are valid for the class and any descendant.
 			]"
 	suppliers: "[
 			BOOLEAN, CHARACTER_8, DATE, DATE_TIME, DECIMAL, 
@@ -41,8 +41,6 @@ note
 	glossary: "[
 			JSON: Java Script Object Notation. See: EIS-JSON Organization URI link (above).
 			]"
-	date: "$Date: 2015-09-02 16:39:20 -0400 (Wed, 02 Sep 2015) $"
-	revision: "$Revision: 12178 $"
 
 deferred class
 	JSON_SERIALIZABLE
@@ -71,6 +69,7 @@ feature -- Status Report
 
 	is_not_persisting_long_strings: BOOLEAN
 			-- Are long strings not being persisted into JSON?
+			--  (see also: `long_string_character_count')
 		do
 			--| To be redefined by descendants.
 		end
@@ -81,7 +80,7 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 			-- Convert Current (`a_object') to a JSON_OBJECT (if possible) by way of `convertible_features'
 			--	list using `reflector'. A detachable (Void) Result (JSON_OBJECT) will be returned in one case
 			--	only: No feature of the `convertible_features' list is an attribute. Otherwise,
-			--	even attributes with Void results will result in JSON Void representations for
+			--	even attributes with Void results will result in {JSON_NULL} representations for
 			--	those features.
 		local
 			i, j: INTEGER
@@ -112,7 +111,11 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 					l_hash.force (True, l_key)
 					check has_key: l_hash.has_key (l_key) end
 					l_field := l_reflector.field (j, a_object)
-					if is_not_persisting_long_strings and then attached {READABLE_STRING_GENERAL} l_field as al_string and then al_string.count > long_string_character_count then
+					if
+						is_not_persisting_long_strings and then
+						attached {READABLE_STRING_GENERAL} l_field as al_string and then
+						al_string.count > max_characters
+					then
 						Result.put (create {JSON_STRING}.make_from_string_32 (long_string_tag), l_key)
 					else
 						Result.put (eiffel_to_json (l_field, l_key), l_key)
@@ -317,7 +320,9 @@ feature {NONE} -- Implementation: Keyed Conversions
 		end
 
 	eiffel_to_json (a_field: detachable separate ANY; a_key: STRING): detachable JSON_VALUE
-			-- ???
+			-- Convert `a_key' and `a_field' (key:value pair) to a {JSON_VALUE}
+			--  (that is -- arrays, booleans, nulls, numbers, strings, or even
+			--	 other complex objects).
 		do
 			create {JSON_NULL} Result
 			if attached {JSON_SERIALIZABLE} a_field as al_convertible then
@@ -352,10 +357,12 @@ feature {NONE} -- Implementation: Keyed Conversions
 
 feature {NONE} -- Implementation
 
-	long_string_character_count: INTEGER
-			-- If a string has more characters than the output of this feature, it is considered a long string.
+	max_characters: INTEGER
+			-- If a string has more characters than the output
+			--	of this feature, it is considered a long string.
+			--  Redefine if you need longer strings.
 		do
-			Result := 10000
+			Result := 10_000
 		end
 
 end
