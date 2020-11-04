@@ -2,7 +2,7 @@ note
 	description: "Mock PERSON for Serialization testing only."
 
 class
-	MOCK_PERSON_FOR_SERIALIZATION_ONLY
+	MOCK_BUGS
 
 inherit
 	JSON_SERIALIZABLE

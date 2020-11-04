@@ -2,10 +2,10 @@ note
 	description: "Mock PERSON for Serialization (from ancestor) and Deserialization (added here by inheritance) testing"
 
 class
-	MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+	MOCK_ELMER
 
 inherit
-	MOCK_PERSON_FOR_SERIALIZATION_ONLY
+	MOCK_BUGS
 
 	JSON_DESERIALIZABLE
 

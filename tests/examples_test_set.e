@@ -3,8 +3,10 @@ note
 		Library Examples
 	]"
 	testing: "type/manual"
-	EIS: "name=example_video", "src=https://youtu.be/G9AiHaYdqzU"
-	EIS: "name=example_video_recursive", "src=https://www.youtube.com/watch?v=_SloGPXGOow"
+	EIS: "name=example_video",
+			"src=https://youtu.be/G9AiHaYdqzU"
+	EIS: "name=example_video_recursive",
+			"src=https://www.youtube.com/watch?v=_SloGPXGOow"
 
 class
 	EXAMPLES_TEST_SET
@@ -19,7 +21,8 @@ feature -- Example routines
 			-- Example show a simple object being serialzed to
 			-- JSON and then deserialized back to object.
 		note
-			EIS: "name=example_video", "src=https://youtu.be/G9AiHaYdqzU"
+			EIS: "name=example_video",
+					"src=https://youtu.be/G9AiHaYdqzU"
 		do
 			assert_strings_equal ("bugs_bunny_serialized_to_JSON", bugs_bunny_json, bugs_bunny.json_out)
 		end
@@ -27,9 +30,10 @@ feature -- Example routines
 	simple_deserialization_example
 			-- Example showing a simple object being serialized and then deserialized.
 		note
-			EIS: "name=example_video", "src=https://youtu.be/G9AiHaYdqzU"
+			EIS: "name=example_video",
+					"src=https://youtu.be/G9AiHaYdqzU"
 		local
-			l_elmer: MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+			l_elmer: MOCK_ELMER
 		do
 				-- Serialization
 			assert_strings_equal ("elmer_fudd_serialized_to_JSON", elmer_fudd_json, elmer_fudd.json_out)
@@ -47,9 +51,10 @@ feature -- Example routines
 				Create a parent class which has a list of people, where each person
 				object is JSON serializable and deserializable.
 				]"
-			EIS: "name=example_video_recursive", "src=https://www.youtube.com/watch?v=_SloGPXGOow"
+			EIS: "name=example_video_recursive",
+					"src=https://www.youtube.com/watch?v=_SloGPXGOow"
 		local
-			l_people: MOCK_PEOPLE_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+			l_people: MOCK_PEOPLE
 		do
 				-- Serialization of complex (recursive) object.
 			assert_strings_equal ("people_serializaed", people_json, people.json_out)
@@ -68,11 +73,12 @@ feature -- Example routines
 
 feature {NONE} -- Objects
 
-	bugs_bunny: MOCK_PERSON_FOR_SERIALIZATION_ONLY
+	bugs_bunny: MOCK_BUGS
 			-- A mock `bugs_bunny' "PERSON" for use in testing.
 			-- Uses the class set up just for serialization to JSON only.
 		note
-			EIS: "name=bugsy_birthday", "src=https://en.wikipedia.org/wiki/Bugs_Bunny"
+			EIS: "name=bugsy_birthday",
+					"src=https://en.wikipedia.org/wiki/Bugs_Bunny"
 		once
 			create Result
 			Result.set_name ("Bugs Bunny")
@@ -80,10 +86,12 @@ feature {NONE} -- Objects
 			Result.set_age (2018 - Result.date_of_birth.year)
 		end
 
-	elmer_fudd: MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
-			--
+	elmer_fudd: MOCK_ELMER
+			-- `elmer_fudd' adds Deserializable to Bugs, which
+			--	is Serializable.
 		note
-			EIS: "name=bugsy_birthday", "src=https://en.wikipedia.org/wiki/Elmer_Fudd"
+			EIS: "name=bugsy_birthday",
+					"src=https://en.wikipedia.org/wiki/Elmer_Fudd"
 		once
 			create Result
 			Result.set_name ("Elmer Fudd")
@@ -91,10 +99,12 @@ feature {NONE} -- Objects
 			Result.set_age (2018 - Result.date_of_birth.year)
 		end
 
-	porky_pig: MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
-			--
+	porky_pig: MOCK_ELMER
+			-- `porky_pig', like Elmer, Deserializable, in addition to
+			--		Serializable like Bugs.
 		note
-			EIS: "name=bugsy_birthday", "src=https://en.wikipedia.org/wiki/Elmer_Fudd"
+			EIS: "name=bugsy_birthday",
+					"src=https://en.wikipedia.org/wiki/Elmer_Fudd"
 		once
 			create Result
 			Result.set_name ("Porky Pig")
@@ -102,7 +112,9 @@ feature {NONE} -- Objects
 			Result.set_age (2018 - Result.date_of_birth.year)
 		end
 
-	people: MOCK_PEOPLE_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+	people: MOCK_PEOPLE
+			-- `people' that are {JSON_AWARE}, both serializable
+			--	and deserializable.
 		note
 
 		once

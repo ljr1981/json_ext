@@ -23,6 +23,7 @@
 		<library name="diff" location="$ISE_LIBRARY\library\diff\diff.ecf"/>
 		<library name="framework" location="..\framework\framework.ecf"/>
 		<library name="json" location="$ISE_LIBRARY\contrib\library\text\parser\json\library\json.ecf"/>
+		<library name="oauth_module" location="$ISE_LIBRARY\unstable\library\web\cms\modules\oauth20\oauth20.ecf"/>
 		<library name="time" location="$ISE_LIBRARY\library\time\time.ecf"/>
 		<cluster name="json_ext" location=".\" recursive="true"/>
 	</target>

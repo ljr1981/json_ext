@@ -2,7 +2,7 @@ note
 	description: "Mock of People"
 
 class
-	MOCK_PEOPLE_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION
+	MOCK_PEOPLE
 
 inherit
 	JSE_AWARE
@@ -25,7 +25,7 @@ feature {NONE} -- Initialization
 				loop
 					check has_person: attached {JSON_VALUE} ic_people.item as al_value then
 						check has_object: attached {JSON_OBJECT} json_string_to_json_object (al_value.representation) as al_person_object then
-							people.force (create {MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION}.make_from_json (al_person_object.representation))
+							people.force (create {MOCK_ELMER}.make_from_json (al_person_object.representation))
 						end
 					end
 				end
@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	people: ARRAYED_LIST [MOCK_PERSON_FOR_BOTH_SERIALIZATION_AND_DESERIALIZATION]
+	people: ARRAYED_LIST [MOCK_ELMER]
 			-- A list of `people' that can be serialized and deserialized.
 		attribute
 			create Result.make (2)
