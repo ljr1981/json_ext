@@ -3,7 +3,7 @@ class
 
 feature -- Operations
 
-	fill_from_hash (a_hash: HASH_TABLE [detachable ANY, HASHABLE]): HASH_TABLE [G, K]
+	fill_from_hash (a_hash: detachable HASH_TABLE [detachable ANY, HASHABLE]): HASH_TABLE [G, K]
 			-- `fill_from_hash' into Result with incoming `a_hash'
 		note
 			question: "Why is this needed?"
@@ -15,21 +15,25 @@ feature -- Operations
 				argument that we must iterate and validate as [STRING, INTEGER_64].
 				]"
 		do
-			across
-				a_hash as ic
-			from
-				create Result.make (a_hash.count)
-			loop
-				if
-					attached {G} ic.item as al_value and then
-					attached {K} ic.key as al_key
-				then
-					Result.force (al_value, al_key)
-					check Result.same_keys (al_key, al_key) end
+			if attached a_hash then
+				across
+					a_hash as ic
+				from
+					create Result.make (a_hash.count)
+				loop
+					if
+						attached {G} ic.item as al_value and then
+						attached {K} ic.key as al_key
+					then
+						Result.force (al_value, al_key)
+						check Result.same_keys (al_key, al_key) end
+					end
 				end
+			else
+				create Result.make (0)
 			end
 		ensure
-			same_count: Result.count = a_hash.count
+			same_count: attached a_hash as al_hash implies Result.count = al_hash.count
 		end
 
 end
