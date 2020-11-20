@@ -318,6 +318,8 @@ feature {NONE} -- Conversions: String
 
 	json_object_to_json_string_representation (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable STRING
 			-- Deserialize actual STRING value for `a_attribute_name' from `a_object'.
+        obsolete
+            "Use `json_object_to_string' instead "
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
@@ -331,6 +333,8 @@ feature {NONE} -- Conversions: String
 
 	json_object_to_json_string_representation_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): STRING
 			-- Deserialize actual STRING value for `a_attribute_name' from `a_object'.
+        obsolete
+            "Use `json_object_to_string_attached' instead "
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
@@ -355,6 +359,8 @@ feature {NONE} -- Conversions: String
 
 	json_object_to_json_immutable_string_representation (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable IMMUTABLE_STRING_32
 			-- Deserialize actual IMMUTABLE_STRING_32 for `a_attribute_name' from `a_object'.
+        obsolete
+            "Use `json_object_to_immutable_string' instead "
 		require
 			non_empty_attribute_name: not a_attribute_name.is_empty
 		do
@@ -367,6 +373,8 @@ feature {NONE} -- Conversions: String
 
 	json_object_to_json_immutable_string_representation_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): IMMUTABLE_STRING_32
 			-- JSON_OBJECT to IMMUTABLE_STRING_32
+        obsolete
+            "Use `json_object_to_immutable_string_attached' instead "
 		do
 			check attached json_object_to_json_immutable_string_representation (a_attribute_name, a_object) as al_attached_result then
 				Result := al_attached_result
