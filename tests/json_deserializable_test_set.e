@@ -56,8 +56,8 @@ feature {NONE} -- Events
 				height_to_headwidth_watio := json_object_to_real_64 ("height_to_headwidth_ratio", al_object)
 				elmers_fwiends := set_elmers_friends (json_object_to_tuple_as_json_array ("elmers_friends", al_object))
 				elmers_things := fill_elmers_things (json_object_to_tuple_as_json_array ("elmers_things", al_object))
-				hash_table_string_string := fill_hash_table_string_string (json_object_to_hash_table_attached ("hash_table_string_string", al_object))
-				hash_table_string_int := fill_hash_table_string_int (json_object_to_hash_table_attached ("hash_table_string_int", al_object))
+				hash_table_string_string := (create {JSE_HASH_HANDLER [STRING, STRING]}).fill_from_hash (json_object_to_hash_table_attached ("hash_table_string_string", al_object))
+				hash_table_string_int := (create {JSE_HASH_HANDLER [STRING, INTEGER_64]}).fill_from_hash (json_object_to_hash_table_attached ("hash_table_string_int", al_object))
 			end
 		end
 
@@ -204,34 +204,6 @@ feature {NONE} -- Implementation: Access
 				Result.force (strip_json_quotes (a_json_array.i_th (i).representation.twin), i)
 				i := i + 1
 			end
-		end
-
-	fill_hash_table_string_string (a_hash: HASH_TABLE [detachable ANY, HASHABLE]): HASH_TABLE [STRING, STRING]
-			-- Fill `hash_table_string_string' with incoming `a_hash' (if any)
-		do
-			create Result.make (a_hash.count)
-			across
-				a_hash as ic
-			loop
-				if attached {STRING} ic.item as al_value and then attached {STRING} ic.key as al_key then
-					Result.force (al_value, al_key)
-				end
-			end
-		end
-
-	fill_hash_table_string_int (a_hash: HASH_TABLE [detachable ANY, HASHABLE]): HASH_TABLE [STRING, INTEGER_64]
-			-- Fill `hash_table_string_int' with incoming `a_hash' (if any)
-		do
-			create Result.make (a_hash.count)
-			across
-				a_hash as ic
-			loop
-				if attached {STRING} ic.item as al_value and then attached {INTEGER_64} ic.key as al_key then
-					Result.force (al_value, al_key)
-				end
-			end
-		ensure
-			count: Result.count = a_hash.count
 		end
 
 	metadata_refreshed (a_current: ANY): ARRAY [JSON_METADATA]
