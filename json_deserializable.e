@@ -726,6 +726,61 @@ feature {TEST_SET_BRIDGE} -- Conversions: Mixed Number
 			create Result.make (l_negative, l_whole, l_numerator, l_denominator)
 		end
 
+feature {NONE} -- Conversions: HASH_TABLE
+
+	json_array_to_eiffel_hash_table (a_array: JSON_ARRAY): HASH_TABLE [ANY, HASHABLE]
+			--
+		local
+			i: INTEGER
+			l_key: detachable HASHABLE
+			l_value: detachable ANY
+		do
+			create Result.make (a_array.count)
+			across
+				a_array.array_representation as ic
+			loop
+				check attached {JSON_ARRAY} ic.item as al_pair then
+					if
+						attached {JSON_VALUE} al_pair [1] as al_item_key and then
+						attached al_item_key.is_hashable
+					then
+						if al_item_key.is_number and then attached {JSON_NUMBER} al_item_key as al_number then
+							if al_number.is_double then l_key := al_number.double_item
+							elseif al_number.is_integer then l_key := al_number.integer_64_item
+							elseif al_number.is_natural then l_key := al_number.natural_64_item
+							elseif al_number.is_real then l_key := al_number.real_64_item
+							else check unknown_numeric_type: False end
+							end
+						elseif al_item_key.is_object and then attached {JSON_OBJECT} al_item_key as al_object then
+							check unhandled_json_object: False end	-- TODO: handle JSON object as hashable-key ... ???
+						elseif al_item_key.is_string and then attached {JSON_STRING} al_item_key as al_string then
+							l_key := al_string.item
+						end
+					end
+					if
+						attached {JSON_VALUE} al_pair [2] as al_item_value and then
+						attached al_item_value.is_hashable
+					then
+						if al_item_value.is_number and then attached {JSON_NUMBER} al_item_value as al_number then
+							if al_number.is_double then l_value := al_number.double_item
+							elseif al_number.is_integer then l_value := al_number.integer_64_item
+							elseif al_number.is_natural then l_value := al_number.natural_64_item
+							elseif al_number.is_real then l_value := al_number.real_64_item
+							else check unknown_numeric_type: False end
+							end
+						elseif al_item_value.is_object and then attached {JSON_OBJECT} al_item_value as al_object then
+							check unhandled_json_object: False end	-- TODO: handle JSON object as hashable-key ... ???
+						elseif al_item_value.is_string and then attached {JSON_STRING} al_item_value as al_string then
+							l_value := al_string.item
+						end
+					end
+					if attached l_key and attached l_value then
+						Result.force (l_value, l_key)
+					end
+				end
+			end
+		end
+
 feature {NONE} -- Conversions: Tuple
 
 	json_array_to_eiffel_tuple (a_array: JSON_ARRAY): TUPLE

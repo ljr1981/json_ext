@@ -29,12 +29,10 @@ feature {NONE} -- Events
 		require else
 			True
 		local
-			l_object: detachable JSON_OBJECT
 			l_any: detachable ANY
 		do
-			l_object := json_string_to_json_object (a_json)
-			check attached_object: attached l_object as al_object then
-				elmer_net_wowth := json_object_to_decimal_attached ("elmer_net_wowth", al_object)
+			check attached_object: attached json_string_to_json_object (a_json) as al_object then
+				elmers_net_worth := json_object_to_decimal_attached ("elmer_net_wowth", al_object)
 				name := json_object_to_json_string_representation_attached ("name", al_object)
 
 				l_any := json_object_to_json_string_representation ("void_name", al_object)
@@ -44,16 +42,16 @@ feature {NONE} -- Events
 				immutable_name := json_object_to_json_immutable_string_representation_attached ("immutable_name", al_object)
 				hunts_wabbits := json_object_to_boolean ("hunts_wabbits", al_object)
 				has_beard := json_object_to_boolean ("has_beard", al_object)
-				first_appeawance_date := json_object_to_date_attached ("first_appearance_date", al_object)
-				first_appeawance_date_time := json_object_to_date_time_attached ("first_appearance_date_time", al_object)
-				first_appeawance_runtime := json_object_to_time ("first_appearance_runtime", al_object)
-				number_of_actors_pwaying_elmer := json_object_to_decimal_attached ("number_actors_playing_elmer", al_object)
+				first_appearance_date := json_object_to_date_attached ("first_appearance_date", al_object)
+				first_appearance_date_time := json_object_to_date_time_attached ("first_appearance_date_time", al_object)
+				first_appearance_runtime := json_object_to_time ("first_appearance_runtime", al_object)
+				number_of_actors_playing_elmer := json_object_to_decimal_attached ("number_actors_playing_elmer", al_object)
 				check valid_void_decimal: json_object_to_decimal ("void_decimal", al_object) = Void end
 				void_decimal := json_object_to_decimal ("void_decimal", al_object)
-				number_of_years_pwayed_by_bryan := json_object_to_integer ("number_of_years_played_by_bryan", al_object)
-				year_bwyan_started := json_object_to_natural_16 ("year_bryan_started", al_object)
-				years_pwayed_by_mel_bwanc := json_object_to_natural_32 ("years_pwayed_by_mel_blanc", al_object)
-				years_pwayed_by_fwank_welker := json_object_to_natural_64 ("years_pwayed_by_frank_welker", al_object)
+				number_of_years_played_by_bryan := json_object_to_integer ("number_of_years_played_by_bryan", al_object)
+				year_bryan_started := json_object_to_natural_16 ("year_bryan_started", al_object)
+				years_played_by_mel_blanc := json_object_to_natural_32 ("years_pwayed_by_mel_blanc", al_object)
+				years_played_by_frank_walker := json_object_to_natural_64 ("years_pwayed_by_frank_welker", al_object)
 				nemesis_count := json_object_to_natural_8 ("nemesis_count", al_object)
 				height_to_headwidth_watio := json_object_to_real_64 ("height_to_headwidth_ratio", al_object)
 				elmers_fwiends := set_elmers_friends (json_object_to_tuple_as_json_array ("elmers_friends", al_object))
@@ -66,29 +64,53 @@ feature -- Test routines
 	test_deserialization
 			-- Test deserialization of `current_representation'
 		do
-			assert_strings_equal ("elmer_net_wowth", "0.01", elmer_net_wowth.out)
+			assert_strings_equal ("elmers_net_worth", "0.01", elmers_net_worth.out)
 			assert_equal ("name_is_elmer_fudd", "Elmer Fudd", name)
 			assert_strings_equal ("has_immutable_name", "my_immutable_name", immutable_name)
 			assert ("hunts_wabbits", hunts_wabbits)
 			assert ("has_no_beard", not has_beard)
-			assert_equal ("first_appearance_date", "11/29/1937", first_appeawance_date.out)
-			assert_equal ("first_appearance_date_time", "11/29/1937 7:15:15.000 AM", first_appeawance_date_time.out)
-			assert_equal ("first_appearance_runtime", "12:07:00.000 AM", first_appeawance_runtime.out)
-			assert_equal ("seven_actors_as_fudd", "[0,7,0]", number_of_actors_pwaying_elmer.out_tuple)
-			assert_equal ("years_by_bryan", 19, number_of_years_pwayed_by_bryan)
-			assert_equal ("year_bryan_started", (1939).to_natural_16, year_bwyan_started)
-			assert_equal ("years_pwayed_by_mel_blanc", (15).to_natural_32, years_pwayed_by_mel_bwanc)
-			assert_equal ("years_pwayed_by_frank_welker", (1).to_natural_64, years_pwayed_by_fwank_welker)
+			assert_equal ("first_appearance_date", "11/29/1937", first_appearance_date.out)
+			assert_equal ("first_appearance_date_time", "11/29/1937 7:15:15.000 AM", first_appearance_date_time.out)
+			assert_equal ("first_appearance_runtime", "12:07:00.000 AM", first_appearance_runtime.out)
+			assert_equal ("seven_actors_as_fudd", "[0,7,0]", number_of_actors_playing_elmer.out_tuple)
+			assert_equal ("years_by_bryan", 19, number_of_years_played_by_bryan)
+			assert_equal ("year_bryan_started", (1939).to_natural_16, year_bryan_started)
+			assert_equal ("years_played_by_mel_blanc", (15).to_natural_32, years_played_by_mel_blanc)
+			assert_equal ("years_played_by_frank_walker", (1).to_natural_64, years_played_by_frank_walker)
 			assert_equal ("nemesis_count", (1).to_natural_8, nemesis_count)
 			assert_equal ("height_to_headwidth_ratio", 0.36619718309859162, height_to_headwidth_watio)
 			assert_equal ("elmers_friends_bugs", "Bugs Bunny", elmers_fwiends.item (1))
 			assert_equal ("elmers_friends_daffy", "Daffy Duck", elmers_fwiends.item (2))
 			assert_integers_equal ("one_thing", 1, elmers_things.count)
+
+			check json_to_object: attached {JSON_OBJECT} json_string_to_json_object ("{%"hash_table%": [[%"A%",%"ITEM_1%"],[%"B%",%"ITEM_2%"]]}") as al_json_object then
+				check array_to_hash: attached json_array_to_eiffel_hash_table (json_object_to_tuple_as_json_array ("hash_table", al_json_object)) as al_hash then
+					create hash_table.make (al_hash.count)
+					across
+						al_hash as ic
+					loop
+						check has_key_value_pair: attached {STRING} ic.key as al_key and then attached {STRING} ic.item as al_value then
+							hash_table.force (al_value, al_key)
+						end
+					end
+				end
+			end
+			check attached hash_table.item ("A") as al_item then
+				assert_strings_equal ("item_1", "ITEM_1", al_item)
+			end
+			check attached hash_table.item ("B") as al_item then
+				assert_strings_equal ("item_2", "ITEM_2", al_item)
+			end
 		end
 
 feature {NONE} -- Implementation: Access
 
-	elmer_net_wowth: DECIMAL
+	hash_table: HASH_TABLE [STRING, STRING]
+		attribute
+			create Result.make (2)
+		end
+
+	elmers_net_worth: DECIMAL
 			-- Test a penny price on a deciaml
 		attribute
 			create Result.make_zero
@@ -114,28 +136,28 @@ feature {NONE} -- Implementation: Access
 	has_beard: BOOLEAN
 			-- Test boolean for Current.
 
-	first_appeawance_date: DATE
+	first_appearance_date: DATE
 			-- Test date for Current.
 
-	first_appeawance_date_time: DATE_TIME
+	first_appearance_date_time: DATE_TIME
 			-- Test date-time for Current.
 
-	first_appeawance_runtime: TIME
+	first_appearance_runtime: TIME
 			-- Test time for Current.
 
-	number_of_actors_pwaying_elmer: DECIMAL
+	number_of_actors_playing_elmer: DECIMAL
 			-- Test decimal for Current.
 
-	number_of_years_pwayed_by_bryan: INTEGER
+	number_of_years_played_by_bryan: INTEGER
 			-- Test integer for Current.
 
-	year_bwyan_started: NATURAL_16
+	year_bryan_started: NATURAL_16
 			-- Test natural 16 for Current.
 
-	years_pwayed_by_mel_bwanc: NATURAL_32
+	years_played_by_mel_blanc: NATURAL_32
 			-- Test natural 32 for Current.
 
-	years_pwayed_by_fwank_welker: NATURAL_64
+	years_played_by_frank_walker: NATURAL_64
 			-- Test natural 64 for Current.
 
 	nemesis_count: NATURAL_8

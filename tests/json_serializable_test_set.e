@@ -76,6 +76,19 @@ feature -- Test routines
 			assert_equal ("mixed_number_representation_neg_5_1_6", "[true,5,1,6]", l_json_array.representation)
 		end
 
+	test_eiffel_hash_table_to_json_array
+			-- Test `eiffel_hash_table_to_json_array'
+		local
+			l_hash: HASH_TABLE [STRING, STRING]
+			l_json_array: JSON_ARRAY
+		do
+			create l_hash.make (2)
+			l_hash.force ("ITEM_1", "A")
+			l_hash.force ("ITEM_2", "B")
+			l_json_array := eiffel_hash_table_to_json_array ("hash_table", l_hash)
+			assert_strings_equal ("hash_as_json_array", "[[%"A%",%"ITEM_1%"],[%"B%",%"ITEM_2%"]]", l_json_array.representation)
+		end
+
 	test_eiffel_tuple_to_json_array
 			-- Test `eiffel_tuple_to_json_array'
 		local

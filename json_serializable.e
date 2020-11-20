@@ -196,6 +196,20 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 
 feature {NONE} -- Implementation: Keyed Conversions
 
+	eiffel_hash_table_to_json_array (a_key: STRING; a_hash_table: HASH_TABLE [ANY, HASHABLE]): JSON_ARRAY
+			--
+		local
+
+		do
+			create Result.make (a_hash_table.count)
+			across
+				a_hash_table as ic
+			loop
+--				Result.add (eiffel_tuple_to_json_array ("item", [ic.key, ic.item]))
+				Result.add (eiffel_array_to_json_array (<<ic.key, ic.item>>))
+			end
+		end
+
 	eiffel_mixed_number_json_array (a_key: STRING; a_mixed_number: FW_MIXED_NUMBER): JSON_ARRAY
 			-- Converts `a_mixed_number' to JSON_ARRAY with the following specification:
 			-- "feature_name":[is_negative, whole_part, numerator, denominator]
@@ -316,6 +330,8 @@ feature {NONE} -- Implementation: Keyed Conversions
 				Result := eiffel_mixed_number_json_array (a_key, al_mixed_number)
 			elseif attached {DECIMAL} a_field as al_decimal then
 				Result := eiffel_decimal_to_json_string (a_key, al_decimal)
+			elseif attached {HASH_TABLE [ANY, HASHABLE]} a_field as al_hash_table then
+				Result := eiffel_hash_table_to_json_array (a_key, al_hash_table)
 			end
 		end
 
