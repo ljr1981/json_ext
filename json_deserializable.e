@@ -302,6 +302,20 @@ feature {NONE} -- Implementation: Basic Operations
 
 feature {NONE} -- Conversions: String
 
+	json_object_to_string (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable STRING
+			-- Deserialized actual STRING value for `a_attribute_name' from `a_object' (if any).
+		do
+			Result := json_object_to_json_string_representation (a_attribute_name, a_object)
+		end
+
+	json_object_to_string_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): STRING
+			-- Deserialized actual STRING value for `a_attribute_name' from `a_object', attached.
+		do
+			check attached json_object_to_json_string_representation (a_attribute_name, a_object) as al_result then
+				Result := al_result
+			end
+		end
+
 	json_object_to_json_string_representation (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable STRING
 			-- Deserialize actual STRING value for `a_attribute_name' from `a_object'.
 		require
@@ -322,6 +336,20 @@ feature {NONE} -- Conversions: String
 		do
 			check attached json_object_to_json_string_representation (a_attribute_name, a_object) as al_attached_result then
 				Result := al_attached_result
+			end
+		end
+
+	json_object_to_immutable_string (a_attribute_name: STRING; a_object: JSON_OBJECT): detachable IMMUTABLE_STRING_32
+			-- Deserialize actual IMMUTABLE_STRING_32 for `a_attribute_name' from `a_object'.
+		do
+			Result := json_object_to_json_immutable_string_representation (a_attribute_name, a_object)
+		end
+
+	json_object_to_immutable_string_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): IMMUTABLE_STRING_32
+			-- Deserialize actual IMMUTABLE_STRING_32 for `a_attribute_name' from `a_object'.
+		do
+			check attached json_object_to_json_immutable_string_representation (a_attribute_name, a_object) as al_result then
+				Result := al_result
 			end
 		end
 
