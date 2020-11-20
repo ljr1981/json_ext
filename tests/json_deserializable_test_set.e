@@ -56,6 +56,8 @@ feature {NONE} -- Events
 				height_to_headwidth_watio := json_object_to_real_64 ("height_to_headwidth_ratio", al_object)
 				elmers_fwiends := set_elmers_friends (json_object_to_tuple_as_json_array ("elmers_friends", al_object))
 				elmers_things := fill_elmers_things (json_object_to_tuple_as_json_array ("elmers_things", al_object))
+				hash_table_string_string := fill_hash_table_string_string (json_object_to_hash_table_attached ("hash_table_string_string", al_object))
+				hash_table_string_int := fill_hash_table_string_int (json_object_to_hash_table_attached ("hash_table_string_int", al_object))
 			end
 		end
 
@@ -82,32 +84,32 @@ feature -- Test routines
 			assert_equal ("elmers_friends_bugs", "Bugs Bunny", elmers_fwiends.item (1))
 			assert_equal ("elmers_friends_daffy", "Daffy Duck", elmers_fwiends.item (2))
 			assert_integers_equal ("one_thing", 1, elmers_things.count)
-
-				-- Fetch hash_table from JSON representation of a hash-table ...
-			check json_to_object: attached {JSON_OBJECT} json_string_to_json_object ("{%"hash_table%": [[%"A%",%"ITEM_1%"],[%"B%",%"ITEM_2%"]]}") as al_json_object then
-				check array_to_hash: attached json_object_to_hash_table ("hash_table", al_json_object) as al_hash then
-					create hash_table.make (al_hash.count)
-					across
-						al_hash as ic
-					loop
-						check has_key_value_pair: attached {STRING} ic.key as al_key and then attached {STRING} ic.item as al_value then
-							hash_table.force (al_value, al_key)
-						end
-					end
-				end
-			end
-				-- Test to ensure hash_table came through ...
-			check attached hash_table.item ("A") as al_item then
+				-- hash string string
+			check has_item_1_string: attached {STRING} hash_table_string_string.item ("A") as al_item then
 				assert_strings_equal ("item_1", "ITEM_1", al_item)
 			end
-			check attached hash_table.item ("B") as al_item then
+			check has_item_2_string: attached {STRING} hash_table_string_string.item ("B") as al_item then
+				assert_strings_equal ("item_2", "ITEM_2", al_item)
+			end
+				-- hash string int
+			check has_item_1_int: attached {STRING} hash_table_string_int.item (1) as al_item then
+				assert_strings_equal ("item_1", "ITEM_1", al_item)
+			end
+			check has_item_2_int: attached {STRING} hash_table_string_int.item (2) as al_item then
 				assert_strings_equal ("item_2", "ITEM_2", al_item)
 			end
 		end
 
 feature {NONE} -- Implementation: Access
 
-	hash_table: HASH_TABLE [STRING, STRING]
+	hash_table_string_string: HASH_TABLE [STRING, STRING]
+			--
+		attribute
+			create Result.make (2)
+		end
+
+	hash_table_string_int: HASH_TABLE [STRING, INTEGER_64]
+			--
 		attribute
 			create Result.make (2)
 		end
@@ -204,9 +206,39 @@ feature {NONE} -- Implementation: Access
 			end
 		end
 
+	fill_hash_table_string_string (a_hash: HASH_TABLE [detachable ANY, HASHABLE]): HASH_TABLE [STRING, STRING]
+			-- Fill `hash_table_string_string' with incoming `a_hash' (if any)
+		do
+			create Result.make (a_hash.count)
+			across
+				a_hash as ic
+			loop
+				if attached {STRING} ic.item as al_value and then attached {STRING} ic.key as al_key then
+					Result.force (al_value, al_key)
+				end
+			end
+		end
+
+	fill_hash_table_string_int (a_hash: HASH_TABLE [detachable ANY, HASHABLE]): HASH_TABLE [STRING, INTEGER_64]
+			-- Fill `hash_table_string_int' with incoming `a_hash' (if any)
+		do
+			create Result.make (a_hash.count)
+			across
+				a_hash as ic
+			loop
+				if attached {STRING} ic.item as al_value and then attached {INTEGER_64} ic.key as al_key then
+					Result.force (al_value, al_key)
+				end
+			end
+		ensure
+			count: Result.count = a_hash.count
+		end
+
 	metadata_refreshed (a_current: ANY): ARRAY [JSON_METADATA]
 		do
 			Result := <<
+						create {JSON_METADATA}.make_text_default,
+						create {JSON_METADATA}.make_text_default,
 						create {JSON_METADATA}.make_text_default,
 						create {JSON_METADATA}.make_text_default,
 						create {JSON_METADATA}.make_text_default,
@@ -246,7 +278,10 @@ feature {NONE} -- Implementation: Access
 						"years_pwayed_by_fwank_welker",
 						"nemesis_count",
 						"height_to_headwidth_watio",
-						"elmers_fwiends">>
+						"elmers_fwiends",
+						"hash_table_string_string",
+						"hash_table_string_int"
+						>>
 		end
 
 feature {NONE} -- Implementation
@@ -299,6 +334,10 @@ feature {NONE} -- Implementation: Representation Constants
 			Result.append (years_pwayed_by_fwank_welker_representation)
 			Result.append (",")
 			Result.append ("%"elmers_things%":%"thing_1%"")
+			Result.append (",")
+			Result.append (hash_table_string_string_representation)
+			Result.append (",")
+			Result.append (hash_table_string_int_representation)
 			Result.append ("}")
 		end
 
@@ -357,6 +396,12 @@ feature {NONE} -- Implementation: Representation Constants
 			-- Representation.
 
 	alternate_representation: STRING = "{%"glossary%": {%"title%": %"example glossary%",%"GlossDiv%": {%"title%": %"S%",%"GlossList%": {%"GlossEntry%": {%"ID%": %"SGML%",%"SortAs%": %"SGML%",%"GlossTerm%": %"Standard Generalized Markup Language%",%"Acronym%": %"SGML%",%"Abbrev%": %"ISO 8879:1986%",%"GlossDef%": {%"para%": %"A meta-markup language, used to create markup languages such as DocBook.%",%"GlossSeeAlso%": [%"GML%", %"XML%"]},%"GlossSee%": %"markup%"}}}}}"
+			-- Representation.
+
+	hash_table_string_string_representation: STRING = "%"hash_table_string_string%":[[%"A%",%"ITEM_1%"],[%"B%",%"ITEM_2%"]]"
+			-- Representation.
+
+	hash_table_string_int_representation: STRING = "%"hash_table_string_int%":[[1,%"ITEM_1%"],[2,%"ITEM_2%"]]"
 			-- Representation.
 
 end

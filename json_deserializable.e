@@ -728,10 +728,20 @@ feature {TEST_SET_BRIDGE} -- Conversions: Mixed Number
 
 feature {NONE} -- Conversions: HASH_TABLE
 
-	json_object_to_hash_table (a_attribute_name: STRING_8; a_object: JSON_OBJECT): HASH_TABLE [detachable ANY, HASHABLE]
+	json_object_to_hash_table_attached (a_attribute_name: STRING; a_object: JSON_OBJECT): HASH_TABLE [detachable ANY, HASHABLE]
+			--
+		do
+			check has_hash: attached json_object_to_hash_table (a_attribute_name, a_object) as al_result then
+				Result := al_result
+			end
+		end
+
+	json_object_to_hash_table (a_attribute_name: STRING_8; a_object: JSON_OBJECT): detachable HASH_TABLE [detachable ANY, HASHABLE]
 			-- Deserialize HASH_TABLE from `a_attribute_name' within `a_object'.
 		do
-			Result := json_array_to_eiffel_hash_table (json_object_to_tuple_as_json_array (a_attribute_name, a_object))
+			if attached {JSON_ARRAY} a_object.item (create {JSON_STRING}.make_from_string (a_attribute_name)) as al_array then
+				Result := json_array_to_eiffel_hash_table (al_array)
+			end
 		end
 
 	json_array_to_eiffel_hash_table (a_array: JSON_ARRAY): HASH_TABLE [detachable ANY, HASHABLE]
