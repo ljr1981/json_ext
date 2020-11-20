@@ -84,20 +84,18 @@ feature -- Test routines
 			assert_equal ("elmers_friends_bugs", "Bugs Bunny", elmers_fwiends.item (1))
 			assert_equal ("elmers_friends_daffy", "Daffy Duck", elmers_fwiends.item (2))
 			assert_integers_equal ("one_thing", 1, elmers_things.count)
+
 				-- hash string string
-			check has_item_1_string: attached {STRING} hash_table_string_string.item ("A") as al_item then
-				assert_strings_equal ("item_1", "ITEM_1", al_item)
-			end
-			check has_item_2_string: attached {STRING} hash_table_string_string.item ("B") as al_item then
-				assert_strings_equal ("item_2", "ITEM_2", al_item)
-			end
+			assert_strings_equal_for_item_for_key ("item_1_string_string", hash_table_string_string, "ITEM_1", "A")
+			assert_strings_equal_for_item_for_key ("item_2_string_string", hash_table_string_string, "ITEM_2", "B")
+
 				-- hash string int
-			check has_item_1_int: attached {STRING} hash_table_string_int.item (1) as al_item then
-				assert_strings_equal ("item_1", "ITEM_1", al_item)
-			end
-			check has_item_2_int: attached {STRING} hash_table_string_int.item (2) as al_item then
-				assert_strings_equal ("item_2", "ITEM_2", al_item)
-			end
+			assert_strings_equal_for_item_for_key ("item_1_string_int", hash_table_string_int, "ITEM_1", 1)
+			assert_strings_equal_for_item_for_key ("item_2_string_int", hash_table_string_int, "ITEM_2", 2)
+
+				-- do same with arrayed-list?
+			assert_strings_equal_for_item_for_key ("arrayed_list_A_is_1", create {ARRAYED_LIST [STRING]}.make_from_array (<<"A", "B">>), "A", 1)
+			assert_strings_equal_for_item_for_key ("arrayed_list_B_is_2", create {ARRAYED_LIST [STRING]}.make_from_array (<<"A", "B">>), "B", 2)
 		end
 
 feature {NONE} -- Implementation: Access

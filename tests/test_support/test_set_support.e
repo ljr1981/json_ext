@@ -140,4 +140,29 @@ feature -- Support
 			assert_32 (a_tag, l_result)
 		end
 
+	assert_has_hash_item_for_key (a_tag: STRING; a_hash: HASH_TABLE [detachable ANY, HASHABLE]; a_value: detachable ANY; a_key: HASHABLE)
+			--
+		do
+			if attached a_hash.item (a_key) as al_value then
+				assert (a_tag, al_value ~ a_value)
+			end
+		end
+
+	assert_strings_equal_for_item_for_key (a_tag: STRING; a_table: DYNAMIC_TABLE [detachable ANY, HASHABLE]; a_value: detachable ANY; a_key: HASHABLE)
+			-- Can `a_key' be found in `a_table'? If so, does `a_value' match found value?
+		do
+			if attached a_value as al_expected_value and then attached a_table.item (a_key) as al_actual_value then
+				assert_strings_equal (a_tag, al_expected_value.out, al_actual_value.out)
+			end
+		end
+
+	assert_strings_equal_diff_for_item_for_key (a_tag: STRING; a_table: DYNAMIC_TABLE [detachable ANY, HASHABLE]; a_value: detachable ANY; a_key: HASHABLE)
+			-- Can `a_key' be found in `a_table'? If so, does `a_value' match found value?
+			-- 	What are the diffs if they do not match?
+		do
+			if attached a_value as al_expected_value and then attached a_table.item (a_key) as al_actual_value then
+				assert_strings_equal_diff (a_tag, al_expected_value.out, al_actual_value.out)
+			end
+		end
+
 end
