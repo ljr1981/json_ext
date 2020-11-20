@@ -79,14 +79,15 @@ feature -- Test routines
 	test_eiffel_hash_table_to_json_array
 			-- Test `eiffel_hash_table_to_json_array'
 		local
+			l_json_object: JSON_OBJECT
 			l_hash: HASH_TABLE [STRING, STRING]
-			l_json_array: JSON_ARRAY
 		do
 			create l_hash.make (2)
 			l_hash.force ("ITEM_1", "A")
 			l_hash.force ("ITEM_2", "B")
-			l_json_array := eiffel_hash_table_to_json_array ("hash_table", l_hash)
-			assert_strings_equal ("hash_as_json_array", "[[%"A%",%"ITEM_1%"],[%"B%",%"ITEM_2%"]]", l_json_array.representation)
+
+			l_json_object := eiffel_hash_table_to_json_object ("hash_table", l_hash)
+			assert_strings_equal ("hash_as_json_array", "{%"hash_table%":%"[[\%"A\%",\%"ITEM_1\%"],[\%"B\%",\%"ITEM_2\%"]]%"}", l_json_object.representation)
 		end
 
 	test_eiffel_tuple_to_json_array

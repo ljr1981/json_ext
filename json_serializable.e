@@ -196,16 +196,20 @@ feature {JSON_SERIALIZABLE} -- Implementation: Unkeyed Conversions
 
 feature {NONE} -- Implementation: Keyed Conversions
 
-	eiffel_hash_table_to_json_array (a_key: STRING; a_hash_table: HASH_TABLE [ANY, HASHABLE]): JSON_ARRAY
+	eiffel_hash_table_to_json_object (a_key: STRING; a_hash_table: HASH_TABLE [detachable ANY, HASHABLE]): JSON_OBJECT
 			--
-		local
+		do
+			create Result.make
+			Result.put_string ((eiffel_hash_table_to_json_array (a_key, a_hash_table)).representation, a_key)
+		end
 
+	eiffel_hash_table_to_json_array (a_key: STRING; a_hash_table: HASH_TABLE [detachable ANY, HASHABLE]): JSON_ARRAY
+			--
 		do
 			create Result.make (a_hash_table.count)
 			across
 				a_hash_table as ic
 			loop
---				Result.add (eiffel_tuple_to_json_array ("item", [ic.key, ic.item]))
 				Result.add (eiffel_array_to_json_array (<<ic.key, ic.item>>))
 			end
 		end
@@ -365,6 +369,8 @@ feature {NONE} -- Implementation: Keyed Conversions
 				Result := eiffel_mixed_number_json_array (a_key, al_mixed_number)
 			elseif attached {DECIMAL} a_field as al_decimal then
 				Result := eiffel_decimal_to_json_string (a_key, al_decimal)
+			elseif attached {HASH_TABLE [detachable ANY, HASHABLE]} a_field as al_hash_table then
+				Result := eiffel_hash_table_to_json_object (a_key, al_hash_table)
 			elseif attached {ANY} a_field as al_field then
 				Result := eiffel_any_to_json_value (a_key, al_field)
 			end
