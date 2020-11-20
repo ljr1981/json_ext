@@ -83,8 +83,9 @@ feature -- Test routines
 			assert_equal ("elmers_friends_daffy", "Daffy Duck", elmers_fwiends.item (2))
 			assert_integers_equal ("one_thing", 1, elmers_things.count)
 
+				-- Fetch hash_table from JSON representation of a hash-table ...
 			check json_to_object: attached {JSON_OBJECT} json_string_to_json_object ("{%"hash_table%": [[%"A%",%"ITEM_1%"],[%"B%",%"ITEM_2%"]]}") as al_json_object then
-				check array_to_hash: attached json_array_to_eiffel_hash_table (json_object_to_tuple_as_json_array ("hash_table", al_json_object)) as al_hash then
+				check array_to_hash: attached json_object_to_hash_table ("hash_table", al_json_object) as al_hash then
 					create hash_table.make (al_hash.count)
 					across
 						al_hash as ic
@@ -95,6 +96,7 @@ feature -- Test routines
 					end
 				end
 			end
+				-- Test to ensure hash_table came through ...
 			check attached hash_table.item ("A") as al_item then
 				assert_strings_equal ("item_1", "ITEM_1", al_item)
 			end
