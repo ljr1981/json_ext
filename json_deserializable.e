@@ -53,7 +53,7 @@ feature {NONE} -- Initialization
 
 	make_from_json (a_json: STRING)
 			-- Initialize Current by parsing `a_json' and rehydrating it into Current.
-			-- See {JSON_CODE_GENERATORY}.generated_make_from_json_code for possible code generation.
+			-- See {JSON_CODE_GENERATOR}.generated_make_from_json_code for possible code generation.
 			-- Write a test that calls this on your JSON_DESERIALIZABLE object.
 		note
 			what: "[
