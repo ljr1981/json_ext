@@ -846,25 +846,44 @@ feature {NONE} -- Conversions: Tuple
 			loop
 				i := ic.cursor_index
 				if attached {JSON_BOOLEAN} ic.item as al_item then
-					Result.put_boolean (al_item.item, i)
+					if attached Result as al_tuple then
+						Result := al_tuple.plus (al_item.item)
+					end
 				elseif attached {JSON_NULL} ic.item as al_item then
-					Result.put (al_item, i)
+					if attached Result as al_tuple then
+						Result := al_tuple.plus (Void)
+					end
 				elseif attached {JSON_NUMBER} ic.item as al_item then
 					if al_item.is_double then
-						Result.put_double (al_item.double_item, i)
+						if attached Result as al_tuple then
+							Result := al_tuple.plus (al_item.double_item)
+						end
 					elseif al_item.is_integer then
-						Result.put_integer (al_item.integer_type, i)
+						if attached Result as al_tuple then
+							Result := al_tuple.plus (al_item.integer_64_item.to_integer)
+						end
 					elseif al_item.is_natural then
-						Result.put_natural_64 (al_item.natural_64_item, i)
+						if attached Result as al_tuple then
+							Result := al_tuple.plus (al_item.natural_64_item)
+						end
 					elseif al_item.is_real then
-						Result.put_real (al_item.real_type, i)
+						if attached Result as al_tuple then
+							Result := al_tuple.plus (al_item.real_type)
+						end
 					end
 				elseif attached {JSON_OBJECT} ic.item as al_item then
-					Result.put (json_string_to_json_object (al_item.representation), i)
+					if attached Result as al_tuple then
+						Result := al_tuple.plus (json_string_to_json_object (al_item.representation))
+					end
 				elseif attached {JSON_STRING} ic.item as al_item then
-					Result.put (al_item.item, i)
+					if attached Result as al_tuple then
+						Result := al_tuple.plus (al_item.item)
+					end
 				end
 				i := i + 1
+			end
+			if not attached Result then
+				create Result
 			end
 		end
 
