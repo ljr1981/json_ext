@@ -1,5 +1,28 @@
 note
-	description: "Facilities that generate possible JSON code"
+	description: "Facilities that generate possible `make_from_json' and other code."
+	purpose: "[
+		Without experience, one may wonder what {JSON_DESERIALIZABLE} functions to use in a
+		class inheriting from {JSE_AWARE} or {JSON_DESERIALIZABLE}. This class helps offer a
+		guide and answers of where to begin (leaving you to figure out precise details).
+		Therefore, the code "generated" by the features of this class are on suggestions and
+		may not work in your particular case. However, they could be close enough to point
+		you in the right direction.
+		
+		The heart of the matter (so far) is converting JSON-strings --> Eiffel-objects. So, this
+		code will provide those types of suggestions.
+		]"
+	how_it_works: "[
+		There are two functions below (so far): `generated_make_from_json_code' and `generated_conversion_code'.
+		The first one is responsible for building out an entire `make_from_json' code suggestion. The second
+		one is responsible for producing each suggested line of conversion code (e.g. JSON --> Eiffel)
+		
+		The `generated_conversion_code' is responsible fo each Eiffel attribute needing to be 
+		parse-and-converted. See the feature itself (below) for more information.
+		]"
+	warning: "[
+		See the `generated_conversion_code' for warnings about its use.
+		]"
+
 
 class
 	JSON_CODE_GENERATOR
@@ -37,6 +60,17 @@ feature -- Basic Operations
 
 	generated_conversion_code (a_field: detachable separate ANY; a_key: STRING): detachable STRING
 			-- Convert `a_field' with field-name of `a_key' into `make_from_json' line-of-code.
+		note
+			basic_design: "[
+				Each basic input data-type of `a_field' is tested for with an attachment-test
+				(e.g. "if attached ______ as _____ then ... end"). The {INTEGER} data-type is
+				a great example because it starts generically by testing for {INTEGER} and
+				then progressively tests for variants of {INTEGER} (e.g. 8/16/32/64).
+				]"
+			warning: "[
+				Not every input data-type has been coded-out (e.g. `a_field'). These will be
+				filled in as-needed (or as-requested).
+				]"
 		local
 			l_gen_type: separate TYPE [detachable separate ANY]
 		do
@@ -72,8 +106,14 @@ feature -- Basic Operations
 			elseif attached {HASH_TABLE [detachable ANY, HASHABLE]} a_field as al_hash_table then
 				-- Result := eiffel_hash_table_to_json_object (a_key, al_hash_table)
 			elseif attached {INTEGER} a_field as al_integer_field then
-				if attached {INTEGER_32} al_integer_field then
+				if attached {INTEGER_8} al_integer_field then
+					Result := "json_object_to_integer_8 (%"" + a_key + "%", al_object)"
+				elseif attached {INTEGER_16} al_integer_field then
+					Result := "json_object_to_integer_16 (%"" + a_key + "%", al_object)"
+				elseif attached {INTEGER_32} al_integer_field then
 					Result := "json_object_to_integer_32 (%"" + a_key + "%", al_object)"
+				elseif attached {INTEGER_64} al_integer_field then
+					Result := "json_object_to_integer_64 (%"" + a_key + "%", al_object)"
 				end
 			elseif attached {ANY} a_field as al_field then
 				-- Result := eiffel_any_to_json_value (a_key, al_field)
