@@ -18,7 +18,7 @@
 			<concurrency support="scoop" use="scoop"/>
 			<void_safety support="all" use="all"/>
 		</capability>
-		<library name="base" location="$ISE_LIBRARY\library\base\base-safe.ecf"/>
+		<library name="base" location="$ISE_LIBRARY\library\base\base.ecf"/>
 		<library name="decimal" location="$ISE_LIBRARY\contrib\library\math\decimal\decimal\decimal.ecf"/>
 		<library name="diff" location="$ISE_LIBRARY\library\diff\diff.ecf"/>
 		<library name="json" location="$ISE_LIBRARY\contrib\library\text\parser\json\library\json.ecf"/>
