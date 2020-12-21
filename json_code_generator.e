@@ -45,7 +45,9 @@ feature -- Basic Operations
 					if l_reflector.field_name (ic_rfield.item, a_object).same_string (ic_field_name.item) and then
 						attached generated_conversion_code (l_reflector.field (ic_rfield.item, a_object), ic_field_name.item) as al_code
 					then
-						if not al_code.is_empty and not al_code.has ('%N') then
+						if not al_code.is_empty and not al_code.has ('%N') and al_code.has_substring ("fill_array") then
+							Result.append_string_general ("%T" + al_code + "%N")
+						elseif not al_code.is_empty and not al_code.has ('%N') then
 							Result.append_string_general ("%Tset_" + ic_field_name.item + " (" + al_code + ")%N")
 						elseif not al_code.is_empty and al_code.has ('%N') then
 							Result.append_string_general (al_code + "%N")
@@ -58,7 +60,7 @@ feature -- Basic Operations
 			Result.append_string_general ("end%N")
 		end
 
-	generated_conversion_code (a_field: detachable separate ANY; a_key: STRING): detachable STRING
+	generated_conversion_code (a_field: detachable ANY; a_key: STRING): detachable STRING
 			-- Convert `a_field' with field-name of `a_key' into `make_from_json' line-of-code.
 		note
 			basic_design: "[
@@ -72,7 +74,8 @@ feature -- Basic Operations
 				filled in as-needed (or as-requested).
 				]"
 		local
-			l_gen_type: separate TYPE [detachable separate ANY]
+			l_gen_type: TYPE [detachable separate ANY]
+			l_list_type: STRING
 		do
 			if attached a_field as al_field then
 				l_gen_type := al_field.generating_type
@@ -85,6 +88,14 @@ feature -- Basic Operations
 			elseif attached {ARRAYED_LIST [detachable ANY]} a_field as al_array then
 				if attached {ARRAYED_LIST [STRING]} a_field then
 					Result := "fill_arrayed_list_of_strings (%"" + a_key + "%", al_object)"
+				elseif attached {ARRAYED_LIST [detachable ANY]} al_array as al_detachable_any then
+					l_list_type := gen_type (l_gen_type)
+					l_list_type.replace_substring_all ("ARRAYED_LIST [", "")
+					l_list_type.replace_substring_all ("]", "")
+					l_list_type.replace_substring_all ("!", "")
+					Result := "fill_arrayed_list_of_detachable_any (%"" + a_key + "%", al_object, " + a_key + ", agent (a_object: JSON_VALUE): " + l_list_type + " do create Result.make_from_json_value (a_object) end)"
+				elseif attached {ARRAYED_LIST [ANY]} al_array as al_any then
+					Result := "incomplete-al_any"
 				end
 			elseif attached {FW_MIXED_NUMBER} a_field as al_mixed_number then
 				-- Result := eiffel_mixed_number_json_array (a_key, al_mixed_number)
@@ -115,10 +126,22 @@ feature -- Basic Operations
 				elseif attached {INTEGER_64} al_integer_field then
 					Result := "json_object_to_integer_64 (%"" + a_key + "%", al_object)"
 				end
+			elseif attached {STRING} a_field as al_string then
+				Result := "json_object_to_string_attached (%"" + a_key + "%", al_object)"
 			elseif attached {ANY} a_field as al_field then
 				-- Result := eiffel_any_to_json_value (a_key, al_field)
 			else
 				Result := "no_conversion"
+			end
+		end
+
+	gen_type (a_type: detachable TYPE [detachable separate ANY]): STRING
+			--
+		do
+			if attached a_type as al_type then
+				Result := al_type.name.out
+			else
+				create Result.make_empty
 			end
 		end
 

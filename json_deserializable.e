@@ -51,6 +51,12 @@ inherit
 
 feature {NONE} -- Initialization
 
+	make_from_json_value (a_object: JSON_VALUE)
+			-- Create current from the string representation of `a_object'.
+		do
+			make_from_json (a_object.representation)
+		end
+
 	make_from_json (a_json: STRING)
 			-- Initialize Current by parsing `a_json' and rehydrating it into Current.
 			-- See {JSON_CODE_GENERATOR}.generated_make_from_json_code for possible code generation.
@@ -74,6 +80,19 @@ feature {NONE} -- Initialization
 		end
 
 feature {NONE} -- Implementation: Array Fillers
+
+	fill_arrayed_list_of_detachable_any (a_attribute_name: STRING; a_object: JSON_OBJECT; a_list: ARRAYED_LIST [detachable ANY]; a_fill_agent: FUNCTION [detachable ANY, detachable TUPLE [JSON_VALUE], detachable ANY])
+			-- Fill list.
+		do
+			across
+				json_object_to_json_array (a_attribute_name, a_object) as ic
+			loop
+				a_fill_agent.call (ic.item)
+				if attached a_fill_agent.last_result as al_result then
+					a_list.force (al_result)
+				end
+			end
+		end
 
 	fill_arrayed_list_of_strings (a_json_array: JSON_ARRAY): ARRAYED_LIST [STRING]
 			-- Fill list.
