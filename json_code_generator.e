@@ -128,6 +128,8 @@ feature -- Basic Operations
 				end
 			elseif attached {STRING} a_field as al_string then
 				Result := "json_object_to_string_attached (%"" + a_key + "%", al_object)"
+			elseif attached {BOOLEAN} a_field as al_boolean then
+				Result := "json_object_to_boolean (%"" + a_key + "%", al_object)"
 			elseif attached {ANY} a_field as al_field then
 				-- Result := eiffel_any_to_json_value (a_key, al_field)
 			else
