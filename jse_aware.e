@@ -21,13 +21,13 @@ feature {NONE} -- Initialization (JSON)
 	metadata_refreshed (a_current: ANY): ARRAY [JSON_METADATA]
 			--<Precursor>
 		do
-			Result := <<>> -- populate with "create {JSON_METADATA}.make_text_default"
+			Result := {ARRAY [JSON_METADATA]} <<>> -- populate with "create {JSON_METADATA}.make_text_default"
 		end
 
 	convertible_features (a_current: ANY): ARRAY [STRING]
 			--<Precursor>
 		do
-			Result := <<>> -- populate with "my_feature_name"
+			Result := {ARRAY [STRING]} <<>> -- populate with "my_feature_name"
 		end
 
 ]"
