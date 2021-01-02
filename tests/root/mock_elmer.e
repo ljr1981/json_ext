@@ -27,4 +27,9 @@ feature {NONE} -- Initialization
 			end
 		end
 
+feature -- Status Report
+
+	has_json_input_error: BOOLEAN
+			--<Precursor>
+
 end

@@ -79,6 +79,19 @@ feature {NONE} -- Initialization
 		deferred
 		end
 
+feature -- Status Report
+
+	has_json_input_error: BOOLEAN
+			-- Does Current `has_json_input_error'?
+		deferred
+		end
+
+	error_message: STRING
+			-- Possible `error_message'.
+		attribute
+			create Result.make_empty
+		end
+
 feature {NONE} -- Implementation: Array Fillers
 
 	fill_arrayed_list_of_detachable_any (a_attribute_name: STRING; a_object: JSON_OBJECT; a_list: ARRAYED_LIST [detachable ANY]; a_fill_agent: FUNCTION [detachable ANY, detachable TUPLE [JSON_VALUE], detachable ANY])

@@ -59,6 +59,11 @@ feature -- Setters
 			end_event := a_item
 		end
 
+feature -- Status Report
+
+	has_json_input_error: BOOLEAN
+			--<Precursor>
+
 feature -- Output
 
 	json_out: STRING

@@ -59,6 +59,11 @@ feature -- Access
 			create Result.make_empty
 		end
 
+feature -- Status Report
+
+	has_json_input_error: BOOLEAN
+			--<Precursor>
+
 feature -- Output
 
 	json_out: STRING

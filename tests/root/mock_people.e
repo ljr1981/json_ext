@@ -40,6 +40,11 @@ feature -- Access
 			create Result.make (2)
 		end
 
+feature -- Status Report
+
+	has_json_input_error: BOOLEAN
+			--<Precursor>
+
 feature {NONE} -- Implementation
 
 	metadata_refreshed (a_current: ANY): ARRAY [JSON_METADATA]

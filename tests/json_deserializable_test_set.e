@@ -61,6 +61,11 @@ feature {NONE} -- Events
 			end
 		end
 
+feature -- Status Report
+
+	has_json_input_error: BOOLEAN
+			--<Precursor>
+
 feature -- Test routines
 
 	test_deserialization
