@@ -30,6 +30,10 @@ feature {NONE} -- Initialization (JSON)
 			Result := {ARRAY [STRING]} <<>> -- populate with "my_feature_name"
 		end
 
+feature -- Status Report
+
+	has_json_input_error: BOOLEAN
+
 ]"
 
 
