@@ -285,14 +285,14 @@ feature {NONE} -- Implementation: JSON_ARRAY Item-getters
 			⟲
 		end
 
-	json_array_get_keyed_object_object (a: JSON_ARRAY; k: STRING): detachable JSON_OBJECT
+	json_array_get_keyed_object_object (a: JSON_ARRAY; k: STRING): detachable JSON_VALUE
 			-- Get a JSON_VALUE from array `a' for a keyed object with key `k'.
 		do
 			⟳ ic:a ¦
 				if attached {JSON_OBJECT} ic as al_object then
 					if attached (create {JSON_STRING}.make_from_string (k)) as al_attr then
 						if al_object.has_key (al_attr) then
-							if attached {JSON_OBJECT} al_object.chained_item (al_attr) as al_value then
+							if attached {JSON_VALUE} al_object.chained_item (al_attr) as al_value then
 								Result := al_value
 							end
 						end

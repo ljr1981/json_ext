@@ -133,6 +133,10 @@ feature -- Access
 			create Result.make (100)
 		end
 
+feature -- Status Report
+
+    has_json_input_error: BOOLEAN
+
 feature -- Settings
 
 	set_table_index (a_index: like table_index)
