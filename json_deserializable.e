@@ -1,4 +1,4 @@
-note
+﻿note
 	description: "[
 			Abstract notion of a JSON deserialization class.
 			]"
@@ -235,6 +235,70 @@ feature {NONE} -- Implementation: Array Fillers
 			-- Date creation agent.
 		do
 			Result := string_to_date (a_json_string, '/')
+		end
+
+feature {NONE} -- Implementation: JSON_ARRAY Item-getters
+
+	json_array_get_keyed_object_string_attached (a: JSON_ARRAY; k: STRING): STRING
+			-- Attached version of `json_array_get_keyed_object_string'.
+		do
+			check attached json_array_get_keyed_object_string (a, k) as al_result then Result := al_result end
+		end
+
+	json_array_get_keyed_object_string (a: JSON_ARRAY; k: STRING): detachable STRING
+			-- Get a string value from a `k' key in `a' JSON_ARRAY.
+		do
+			if attached {JSON_STRING} json_array_get_keyed_object_value (a, k) as al_value then
+				Result := al_value.item
+			end
+		end
+
+	json_array_get_keyed_object_integer_64_attached (a: JSON_ARRAY; k: STRING): INTEGER_64
+			-- Attached version of `json_array_get_keyed_object_string'.
+		do
+			check attached json_array_get_keyed_object_integer_64 (a, k) as al_result then Result := al_result end
+		end
+
+	json_array_get_keyed_object_integer_64 (a: JSON_ARRAY; k: STRING): detachable INTEGER_64
+			-- Get a string value from a `k' key in `a' JSON_ARRAY.
+		do
+			if attached {JSON_NUMBER} json_array_get_keyed_object_value (a, k) as al_value and then
+				al_value.is_integer
+			then
+				Result := al_value.integer_64_item
+			end
+		end
+
+	json_array_get_keyed_object_value (a: JSON_ARRAY; k: STRING): detachable JSON_VALUE
+			-- Get a JSON_VALUE from array `a' for a keyed object with key `k'.
+		do
+			⟳ ic:a ¦
+				if attached {JSON_OBJECT} ic as al_object then
+					if attached (create {JSON_STRING}.make_from_string (k)) as al_attr then
+						if al_object.has_key (al_attr) then
+							if attached {JSON_VALUE} al_object.chained_item (al_attr) as al_value then
+								Result := al_value
+							end
+						end
+					end
+				end
+			⟲
+		end
+
+	json_array_get_keyed_object_object (a: JSON_ARRAY; k: STRING): detachable JSON_OBJECT
+			-- Get a JSON_VALUE from array `a' for a keyed object with key `k'.
+		do
+			⟳ ic:a ¦
+				if attached {JSON_OBJECT} ic as al_object then
+					if attached (create {JSON_STRING}.make_from_string (k)) as al_attr then
+						if al_object.has_key (al_attr) then
+							if attached {JSON_OBJECT} al_object.chained_item (al_attr) as al_value then
+								Result := al_value
+							end
+						end
+					end
+				end
+			⟲
 		end
 
 feature {NONE} -- Implementation: Basic Operations
